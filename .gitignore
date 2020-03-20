@@ -1,0 +1,41 @@
+target/
+
+# Default ignored files
+/workspace.xml
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+**/.idea*
+**.iml
+**.ipr
+**.iws
+**/target
+**/.mvn*
+**/mvn*
+
+# Mac
+.DS_Store
+
+# Maven
+**/log/
+**/target/
+**/.mvn/
+
+# JAR Files
+*.jar
+
+# Log files
+*.log

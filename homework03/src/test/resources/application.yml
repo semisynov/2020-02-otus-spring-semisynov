@@ -1,0 +1,6 @@
+spring:
+  messages:
+    basename: quiz
+application:
+  result: 4
+  locale: "en_EN"
