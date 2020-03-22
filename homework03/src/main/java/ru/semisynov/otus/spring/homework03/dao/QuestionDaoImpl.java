@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.CSVParser;
 import org.springframework.stereotype.Repository;
 import ru.semisynov.otus.spring.homework03.domain.Question;
 import ru.semisynov.otus.spring.homework03.services.CsvFileReader;
@@ -24,11 +24,10 @@ public class QuestionDaoImpl implements QuestionDao {
     public final List<Question> questionList() {
         List<Question> questions = new ArrayList<>();
         try {
-            Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(csvFileReader.readCsvFile());
-            for (CSVRecord record : records) {
-                String columnOne = record.get(0);
-                String columnTwo = record.get(1);
-                questions.add(new Question(columnOne, columnTwo));
+            Iterable<String> allQuestionLines = csvFileReader.readAllLines();
+            for (String questionLine : allQuestionLines) {
+                CSVParser parser = CSVParser.parse(questionLine, CSVFormat.DEFAULT);
+                parser.getRecords().forEach(r -> questions.add(new Question(r.get(0), r.get(1))));
             }
         } catch (IllegalArgumentException | IOException e) {
             log.error("Error wile parsing questions", e);

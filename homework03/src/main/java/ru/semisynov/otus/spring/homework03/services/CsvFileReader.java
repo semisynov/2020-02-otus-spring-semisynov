@@ -1,7 +1,7 @@
 package ru.semisynov.otus.spring.homework03.services;
 
-import java.io.FileReader;
+import java.util.List;
 
 public interface CsvFileReader {
-    FileReader readCsvFile();
+    List<String> readAllLines();
 }
