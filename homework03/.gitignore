@@ -24,7 +24,6 @@ target/
 **.iws
 **/target
 **/.mvn*
-**/mvn*
 
 # Mac
 .DS_Store
