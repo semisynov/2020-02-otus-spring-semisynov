@@ -4,7 +4,7 @@ import ru.semisynov.otus.spring.homework04.domain.User;
 
 public interface UserService {
 
-    User registerUser();
+    User registerUser(String defaultLastName, String defaultFirstName);
 
     void increaseUserResult();
 

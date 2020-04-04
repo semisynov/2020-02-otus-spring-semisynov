@@ -7,6 +7,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.springframework.stereotype.Repository;
 import ru.semisynov.otus.spring.homework04.domain.Question;
+import ru.semisynov.otus.spring.homework04.errors.BadParameterException;
 import ru.semisynov.otus.spring.homework04.services.CsvFileReader;
 
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 parser.getRecords().forEach(r -> questions.add(new Question(r.get(0), r.get(1))));
             }
         } catch (IllegalArgumentException | IOException e) {
-            log.error("Error wile parsing questions", e);
+            throw new BadParameterException("Error wile pa(rsing questions");
         }
         return questions;
     }

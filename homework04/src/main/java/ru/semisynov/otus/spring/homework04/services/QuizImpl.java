@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.semisynov.otus.spring.homework04.config.ApplicationProperties;
 import ru.semisynov.otus.spring.homework04.dao.QuestionDao;
 import ru.semisynov.otus.spring.homework04.domain.Question;
+import ru.semisynov.otus.spring.homework04.errors.BadParameterException;
 
 import java.util.List;
 
@@ -28,14 +29,10 @@ public class QuizImpl implements Quiz {
             resultMinValue = Integer.parseInt(applicationProperties.getResult());
         } catch (NumberFormatException e) {
             log.error(e.getMessage());
-            return;
+            throw new BadParameterException("Bad parameter resultMinValue");
         }
 
         List<Question> questions = questionDao.questionList();
-        if (questions.size() == 0) {
-            log.error("Некорректное количиство вопросов");
-            return;
-        }
 
         for (Question question : questions) {
             printService.print(question.getQuestion());

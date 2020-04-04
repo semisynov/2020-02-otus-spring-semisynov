@@ -4,6 +4,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
+import ru.semisynov.otus.spring.homework04.errors.BadParameterException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,10 +28,16 @@ public class CsvFileReaderImpl implements CsvFileReader {
     public final List<String> readAllLines() {
         try {
             URL url = ClassLoader.getSystemResource(fileName);
-            return Files.readAllLines(Paths.get(url.getFile()));
+            if (url == null) {
+                throw new BadParameterException("File not found");
+            }
+            List<String> allLines = Files.readAllLines(Paths.get(url.getFile()));
+            if (allLines.size() == 0) {
+                throw new BadParameterException("Question file is empty");
+            }
+            return allLines;
         } catch (IOException e) {
-            log.error("Error while reading file", e);
-            return null;
+            throw new BadParameterException("Error while reading file");
         }
     }
 }

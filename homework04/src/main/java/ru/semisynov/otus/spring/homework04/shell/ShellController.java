@@ -5,6 +5,7 @@ import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
+import org.springframework.shell.standard.ShellOption;
 import ru.semisynov.otus.spring.homework04.domain.User;
 import ru.semisynov.otus.spring.homework04.services.PrintService;
 import ru.semisynov.otus.spring.homework04.services.Quiz;
@@ -20,8 +21,8 @@ public class ShellController {
     private User user;
 
     @ShellMethod(value = "Register user command", key = {"l", "login"})
-    public String register() {
-        this.user = userService.registerUser();
+    public String register(@ShellOption(defaultValue = "AnyUser") String lastName, @ShellOption(defaultValue = "AnyUser") String firstName) {
+        this.user = userService.registerUser(lastName, firstName);
         Object[] argsResultInfo = {this.user.getLastName(), this.user.getFirstName()};
         String loginInfo = printService.getLineWithLocale("message.shell.hello", argsResultInfo);
         return loginInfo;

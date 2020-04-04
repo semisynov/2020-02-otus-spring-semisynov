@@ -15,11 +15,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerUser() {
+    public User registerUser(String defaultLastName, String defaultFirstName) {
         printService.printLineWithLocale("message.lastName");
-        this.user.setLastName(printService.readLine());
+        String lastName = printService.readLine();
+        if (lastName.isEmpty()) {
+            lastName = defaultLastName;
+        }
+        this.user.setLastName(lastName);
+
         printService.printLineWithLocale("message.firstName");
-        this.user.setFirstName(printService.readLine());
+        String firstName = printService.readLine();
+        if (firstName.isEmpty()) {
+            firstName = defaultFirstName;
+        }
+        this.user.setFirstName(firstName);
         return this.user;
     }
 
