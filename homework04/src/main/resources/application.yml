@@ -1,0 +1,23 @@
+spring:
+  messages:
+    basename: quiz
+  profiles:
+    active: production
+---
+spring:
+  profiles: development
+application:
+  result: 2
+  locale: "ru_RU"
+logging:
+  level:
+    root: INFO
+---
+spring:
+  profiles: production
+application:
+  result: 4
+  locale: "en_EN"
+logging:
+  level:
+    root: ERROR
