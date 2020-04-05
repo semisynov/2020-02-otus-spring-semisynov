@@ -1,8 +1,14 @@
-# Getting Started
+# Домашнее задание №3
 
-### Reference Documentation
-For further reference, please consider the following sections:
+Перенести приложение для тестирования студентов на Spring Boot
+Цель: Цель: использовать возможности Spring Boot, чтобы разрабатывать современные приложения, так, как их сейчас и разрабатывают. Результат: Production-ready приложение на Spring Boot
+Это домашнее задание выполняется на основе предыдущего.
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.2.5.RELEASE/maven-plugin/)
+1. Создать проект, используя Spring Boot Initializr (https://start.spring.io)
+2. Перенести приложение проведения опросов из прошлого домашнего задания. MesageSource должен быть из автоконфигурации Spring Boot.
+3. Перенести все свойства в application.yml
+4. Сделать собственный баннер для приложения.
+5. Перенести тесты и использовать spring-boot-test-starter для тестирования
+*Опционально - использовать ANSI-цвета для баннера.
 
+Коммитить wrapper или нет в репозиторий - решать Вам.
