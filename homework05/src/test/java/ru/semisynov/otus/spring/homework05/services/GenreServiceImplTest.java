@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import ru.semisynov.otus.spring.homework05.dao.GenreDao;
@@ -26,6 +28,15 @@ import static org.mockito.Mockito.when;
 })
 @DisplayName("Класс GenreServiceImpl ")
 class GenreServiceImplTest {
+
+    @Configuration
+    static class TestConfig {
+
+        @Bean
+        public GenreService genreService(GenreDao genreDao) {
+            return new GenreServiceImpl(genreDao);
+        }
+    }
 
     private static final long EXPECTED_COUNT = 1L;
     private static final long EXPECTED_ID = 1L;
@@ -90,5 +101,4 @@ class GenreServiceImplTest {
         String result = genreService.getAllGenres();
         assertEquals(result, genres.stream().map(Genre::toString).collect(Collectors.joining("\n")));
     }
-
 }

@@ -10,7 +10,7 @@ import ru.semisynov.otus.spring.homework05.model.Genre;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Service("genreService")
 @RequiredArgsConstructor
 @Slf4j
 public class GenreServiceImpl implements GenreService {

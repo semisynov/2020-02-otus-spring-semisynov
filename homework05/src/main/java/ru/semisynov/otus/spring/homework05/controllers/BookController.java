@@ -7,7 +7,7 @@ import org.springframework.shell.standard.ShellOption;
 import ru.semisynov.otus.spring.homework05.errors.BadParameterException;
 import ru.semisynov.otus.spring.homework05.services.BookService;
 
-@ShellComponent
+@ShellComponent("bookController")
 @RequiredArgsConstructor
 public class BookController {
 
@@ -31,25 +31,24 @@ public class BookController {
         return result;
     }
 
-//
-//    @ShellMethod(value = "Get all genres", key = {"g", "genres"})
-//    public String getGenresList() {
-//        return genreService.getAllGenres();
-//    }
-//
-//    @ShellMethod(value = "Create new genre", key = {"gc", "genreCreate"})
-//    public String createGenre(@ShellOption(help = "Genre title") String title) {
-//        return genreService.createGenre(title);
-//    }
-//
-//    @ShellMethod(value = "Delete genre", key = {"gd", "genreDelete"})
-//    public String deleteAuthor(@ShellOption(help = "Genre id") String id) {
-//        String result;
-//        try {
-//            result = genreService.deleteGenreById(Long.parseLong(id));
-//        } catch (NumberFormatException e) {
-//            throw new BadParameterException(BAD_ID_PARAMETER);
-//        }
-//        return result;
-//    }
+    @ShellMethod(value = "Get all books", key = {"b", "books"})
+    public String getBooksList() {
+        return bookService.getAllBooks();
+    }
+
+    @ShellMethod(value = "Create new book", key = {"bc", "bookCreate"})
+    public String createBook(@ShellOption(help = "Book title") String title, String authors, String genres) {
+        return bookService.createBook(title, authors, genres);
+    }
+
+    @ShellMethod(value = "Delete book", key = {"bd", "bookDelete"})
+    public String deleteBook(@ShellOption(help = "Book id") String id) {
+        String result;
+        try {
+            result = bookService.deleteBookById(Long.parseLong(id));
+        } catch (NumberFormatException e) {
+            throw new BadParameterException(BAD_ID_PARAMETER);
+        }
+        return result;
+    }
 }

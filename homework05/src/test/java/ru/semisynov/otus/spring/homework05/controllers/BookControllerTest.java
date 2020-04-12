@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import ru.semisynov.otus.spring.homework05.errors.BadParameterException;
-import ru.semisynov.otus.spring.homework05.services.AuthorService;
+import ru.semisynov.otus.spring.homework05.services.BookService;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -18,33 +18,33 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
-@DisplayName("Класс AuthorController ")
-class AuthorControllerTest {
+@DisplayName("Класс BookController ")
+class BookControllerTest {
 
     @Configuration
     static class TestConfig {
 
         @Bean
-        public AuthorController authorController(AuthorService authorService) {
-            return new AuthorController(authorService);
+        public BookController bookController(BookService bookService) {
+            return new BookController(bookService);
         }
     }
 
     private static final String BAD_ID = "a";
 
     @MockBean
-    private AuthorService authorService;
+    private BookService bookService;
 
     @Autowired
-    private AuthorController authorController;
+    private BookController bookController;
 
     @Test
-    void getAuthorByIdBadParameterException() {
-        assertThrows(BadParameterException.class, () -> authorController.getAuthorById(BAD_ID));
+    void getBookByIdBadParameterException() {
+        assertThrows(BadParameterException.class, () -> bookController.getBookById(BAD_ID));
     }
 
     @Test
     void deleteAuthorByIdBadParameterException() {
-        assertThrows(BadParameterException.class, () -> authorController.getAuthorById(BAD_ID));
+        assertThrows(BadParameterException.class, () -> bookController.deleteBook(BAD_ID));
     }
 }

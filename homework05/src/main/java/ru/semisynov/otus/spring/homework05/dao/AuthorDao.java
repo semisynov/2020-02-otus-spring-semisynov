@@ -18,4 +18,6 @@ public interface AuthorDao {
     void deleteById(long id);
 
     List<Author> getByBookId(long id);
+
+    Optional<Author> getByName(String name);
 }

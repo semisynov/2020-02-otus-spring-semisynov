@@ -1,6 +1,7 @@
 package ru.semisynov.otus.spring.homework05.dao;
 
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import ru.semisynov.otus.spring.homework05.errors.ReferenceException;
 import ru.semisynov.otus.spring.homework05.model.Author;
 
 import java.sql.ResultSet;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
+@Repository("authorDao")
 @AllArgsConstructor
 public class AuthorDaoJdbc implements AuthorDao {
 
@@ -53,13 +55,17 @@ public class AuthorDaoJdbc implements AuthorDao {
         KeyHolder kh = new GeneratedKeyHolder();
         jdbc.update("insert into authors (name) values (:name)",
                 params, kh);
-        return kh.getKey().longValue();
+        return kh.getKey() != null ? kh.getKey().longValue() : 0L;
     }
 
     @Override
     public void deleteById(long id) {
-        jdbc.update("delete from authors where author_id = :id",
-                Map.of("id", id));
+        try {
+            jdbc.update("delete from authors where author_id = :id",
+                    Map.of("id", id));
+        } catch (DataIntegrityViolationException e) {
+            throw new ReferenceException(String.format("Unable to delete the author %s there are links in the database", id));
+        }
     }
 
     @Override
@@ -68,6 +74,18 @@ public class AuthorDaoJdbc implements AuthorDao {
                 "inner join book_author ba on ba.author_id = a.author_id " +
                 "where ba.book_id = :id", Map.of("id", id), new AuthorMapper());
         return authors;
+    }
+
+    @Override
+    public Optional<Author> getByName(String name) {
+        Optional<Author> author;
+        try {
+            author = Optional.ofNullable(jdbc.queryForObject("select * from authors where upper(name) = upper(:name)",
+                    Map.of("name", name), new AuthorMapper()));
+        } catch (EmptyResultDataAccessException e) {
+            author = Optional.empty();
+        }
+        return author;
     }
 
     private static class AuthorMapper implements RowMapper<Author> {

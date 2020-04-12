@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import ru.semisynov.otus.spring.homework05.dao.AuthorDao;
@@ -20,12 +22,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+
 @SpringBootTest(properties = {
         InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
 @DisplayName("Класс AuthorServiceImplTest ")
 class AuthorServiceImplTest {
+
+    @Configuration
+    static class TestConfig {
+
+        @Bean
+        public AuthorService authorService(AuthorDao authorDao) {
+            return new AuthorServiceImpl(authorDao);
+        }
+    }
 
     private static final long EXPECTED_COUNT = 1L;
     private static final long EXPECTED_ID = 1L;

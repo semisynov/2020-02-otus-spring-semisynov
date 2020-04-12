@@ -7,7 +7,7 @@ import org.springframework.shell.standard.ShellOption;
 import ru.semisynov.otus.spring.homework05.errors.BadParameterException;
 import ru.semisynov.otus.spring.homework05.services.AuthorService;
 
-@ShellComponent
+@ShellComponent("authorController")
 @RequiredArgsConstructor
 public class AuthorController {
 

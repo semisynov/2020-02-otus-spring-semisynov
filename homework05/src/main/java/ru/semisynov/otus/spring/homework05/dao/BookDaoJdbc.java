@@ -3,7 +3,10 @@ package ru.semisynov.otus.spring.homework05.dao;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.semisynov.otus.spring.homework05.model.Author;
 import ru.semisynov.otus.spring.homework05.model.Book;
@@ -13,7 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-@Repository
+@Repository("bookDao")
 @AllArgsConstructor
 public class BookDaoJdbc implements BookDao {
 
@@ -38,32 +41,48 @@ public class BookDaoJdbc implements BookDao {
         return book;
     }
 
-//    @Override
-//    public List<Author> getAll() {
-//        List<Author> authors = jdbc.query("select * from authors", new AuthorDaoJdbc.AuthorMapper());
-//        return authors;
-//    }
-//
-//    @Override
-//    public long insert(Author author) {
-//        MapSqlParameterSource params = new MapSqlParameterSource();
-//        params.addValue("name", author.getName());
-//        KeyHolder kh = new GeneratedKeyHolder();
-//        jdbc.update("insert into authors (name) values (:name)",
-//                params, kh);
-//        return kh.getKey().longValue();
-//    }
-//
-//    @Override
-//    public void deleteById(long id) {
-//        jdbc.update("delete from authors where author_id = :id",
-//                Map.of("id", id));
-//    }
-//
-//private final long id;
-//    private final String title;
-//    private final List<Author> authors;
-//    private final List<Genre> genres;
+    @Override
+    public List<Book> getAll() {
+        List<Book> books = jdbc.query("select * from books", new BookDaoJdbc.BookMapper());
+        return books;
+    }
+
+    @Override
+    public long insert(Book book) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("title", book.getTitle());
+        KeyHolder kh = new GeneratedKeyHolder();
+        jdbc.update("insert into books (title) values (:title)",
+                params, kh);
+        long newId = kh.getKey() != null ? kh.getKey().longValue() : 0;
+        if (newId != 0) {
+            book.getAuthors().forEach(a -> insertBookAuthors(newId, a.getId()));
+            book.getGenres().forEach(g -> insertBookGenres(newId, g.getId()));
+        }
+
+        return newId;
+    }
+
+    @Override
+    public void deleteById(long id) {
+        jdbc.update("delete from books where book_id = :id",
+                Map.of("id", id));
+        jdbc.update("delete from book_author where book_id = :id",
+                Map.of("id", id));
+        jdbc.update("delete from book_genre where book_id = :id",
+                Map.of("id", id));
+    }
+
+    private void insertBookAuthors(long bookId, long authorId) {
+        jdbc.update("insert into book_author values (:bookId, :authorId)",
+                Map.of("bookId", bookId, "authorId", authorId));
+    }
+
+    private void insertBookGenres(long bookId, long genreId) {
+        jdbc.update("insert into book_genre values (:bookId, :genreId)",
+                Map.of("bookId", bookId, "genreId", genreId));
+    }
+
     private static class BookMapper implements RowMapper<Book> {
 
         @Override
@@ -72,7 +91,7 @@ public class BookDaoJdbc implements BookDao {
             String title = resultSet.getString("title");
             List<Author> authors = new ArrayList<>();
             List<Genre> genres = new ArrayList<>();
-            return new Book(bookId, title,  authors, genres);
+            return new Book(bookId, title, authors, genres);
         }
     }
 }

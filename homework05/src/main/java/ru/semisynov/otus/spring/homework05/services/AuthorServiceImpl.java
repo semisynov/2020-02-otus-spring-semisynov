@@ -10,7 +10,7 @@ import ru.semisynov.otus.spring.homework05.model.Author;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Service("authorService")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthorServiceImpl implements AuthorService {

@@ -7,7 +7,7 @@ import org.springframework.shell.standard.ShellOption;
 import ru.semisynov.otus.spring.homework05.errors.BadParameterException;
 import ru.semisynov.otus.spring.homework05.services.GenreService;
 
-@ShellComponent
+@ShellComponent("genreController")
 @RequiredArgsConstructor
 public class GenreController {
 

@@ -18,4 +18,6 @@ public interface GenreDao {
     void deleteById(long id);
 
     List<Genre> getByBookId(long id);
+
+    Optional<Genre> getByTitle(String title);
 }
