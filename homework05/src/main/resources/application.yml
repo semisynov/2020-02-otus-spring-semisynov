@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active: development
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+    initialization-mode: always
+    schema: schema.sql
+    data: data.sql
+---
+spring:
+  profiles: development
+logging:
+  level:
+    root: INFO
+---
+spring:
+  profiles: production
+logging:
+  level:
+    root: ERROR

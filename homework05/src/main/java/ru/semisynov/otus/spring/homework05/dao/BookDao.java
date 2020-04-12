@@ -2,9 +2,17 @@ package ru.semisynov.otus.spring.homework05.dao;
 
 import ru.semisynov.otus.spring.homework05.model.Book;
 
+import java.util.Optional;
+
 public interface BookDao {
 
-    int count();
-    void insert(Book book);
-    //Book getById(long id);
+    long count();
+
+    Optional<Book> getById(long id);
+
+//    List<Book> getAll();
+//
+//    long insert(Book book);
+//
+//    void deleteById(long id);
 }

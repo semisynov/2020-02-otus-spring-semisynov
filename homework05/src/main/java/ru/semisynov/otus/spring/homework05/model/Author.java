@@ -2,13 +2,13 @@ package ru.semisynov.otus.spring.homework05.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
-@AllArgsConstructor
 @Getter
+@ToString
+@AllArgsConstructor
 public class Author {
 
     private final long id;
-    private final String lastName;
-    private final String firstName;
-    private final long genreId;
+    private final String name;
 }

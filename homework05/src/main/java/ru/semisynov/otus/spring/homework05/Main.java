@@ -2,25 +2,16 @@ package ru.semisynov.otus.spring.homework05;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import ru.semisynov.otus.spring.homework05.dao.BookDao;
-import ru.semisynov.otus.spring.homework05.model.Book;
+import org.springframework.context.annotation.Configuration;
 
 
 @SpringBootApplication
+@Configuration
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class);
 
-        ApplicationContext context = SpringApplication.run(Main.class);
-
-        BookDao bookDao = context.getBean(BookDao.class);
-
-        System.out.println(bookDao.count());
-
-        bookDao.insert(new Book(2L, "Test", 1L));
-
-        System.out.println(bookDao.count());
         //Console.main(args);
     }
 
