@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.semisynov.otus.spring.homework05.errors.ReferenceException;
+import ru.semisynov.otus.spring.homework05.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework05.model.Author;
 
 import java.sql.ResultSet;
@@ -34,7 +34,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     public Optional<Author> getById(long id) {
         Optional<Author> author;
         try {
-            author = Optional.ofNullable(jdbc.queryForObject("select * from authors where author_id = :id",
+            author = Optional.ofNullable(jdbc.queryForObject("select author_id, name from authors where author_id = :id",
                     Map.of("id", id), new AuthorMapper()));
         } catch (EmptyResultDataAccessException e) {
             author = Optional.empty();
@@ -44,7 +44,7 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public List<Author> getAll() {
-        List<Author> authors = jdbc.query("select * from authors", new AuthorMapper());
+        List<Author> authors = jdbc.query("select author_id, name from authors", new AuthorMapper());
         return authors;
     }
 
@@ -64,13 +64,13 @@ public class AuthorDaoJdbc implements AuthorDao {
             jdbc.update("delete from authors where author_id = :id",
                     Map.of("id", id));
         } catch (DataIntegrityViolationException e) {
-            throw new ReferenceException(String.format("Unable to delete the author %s there are links in the database", id));
+            throw new DataReferenceException(String.format("Unable to delete the author %s there are links in the database", id));
         }
     }
 
     @Override
     public List<Author> getByBookId(long id) {
-        List<Author> authors = jdbc.query("select * from authors a " +
+        List<Author> authors = jdbc.query("select a.author_id, a.name from authors a " +
                 "inner join book_author ba on ba.author_id = a.author_id " +
                 "where ba.book_id = :id", Map.of("id", id), new AuthorMapper());
         return authors;
@@ -80,7 +80,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     public Optional<Author> getByName(String name) {
         Optional<Author> author;
         try {
-            author = Optional.ofNullable(jdbc.queryForObject("select * from authors where upper(name) = upper(:name)",
+            author = Optional.ofNullable(jdbc.queryForObject("select author_id, name from authors where upper(name) = upper(:name)",
                     Map.of("name", name), new AuthorMapper()));
         } catch (EmptyResultDataAccessException e) {
             author = Optional.empty();

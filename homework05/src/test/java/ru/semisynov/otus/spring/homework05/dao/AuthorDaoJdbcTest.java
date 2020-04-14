@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
+import ru.semisynov.otus.spring.homework05.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework05.errors.ItemNotFoundException;
-import ru.semisynov.otus.spring.homework05.errors.ReferenceException;
 import ru.semisynov.otus.spring.homework05.model.Author;
 
 import java.util.List;
@@ -71,7 +71,7 @@ class AuthorDaoJdbcTest {
     @DisplayName("не удаляет автора из БД есть связь")
     @Test
     void shouldNotDeleteAuthor() {
-        assertThrows(ReferenceException.class, () -> authorDao.deleteById(1L));
+        assertThrows(DataReferenceException.class, () -> authorDao.deleteById(1L));
     }
 
     @DisplayName("возвращает список всех авторов по id книги")

@@ -1,8 +1,10 @@
 package ru.semisynov.otus.spring.homework05.errors;
 
-public class BadParameterException extends RuntimeException {
+import ru.semisynov.otus.spring.homework05.errors.enums.ReturnCodeEnum;
+
+public class BadParameterException extends LibraryException {
 
     public BadParameterException(String message) {
-        super(message);
+        super(message, ReturnCodeEnum.BAD_PARAMETER);
     }
 }

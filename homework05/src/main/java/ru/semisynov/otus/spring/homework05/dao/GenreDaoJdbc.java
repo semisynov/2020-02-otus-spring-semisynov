@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.semisynov.otus.spring.homework05.errors.ReferenceException;
+import ru.semisynov.otus.spring.homework05.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework05.model.Genre;
 
 import java.sql.ResultSet;
@@ -34,7 +34,7 @@ public class GenreDaoJdbc implements GenreDao {
     public Optional<Genre> getById(long id) {
         Optional<Genre> genre;
         try {
-            genre = Optional.ofNullable(jdbc.queryForObject("select * from genres where genre_id = :id",
+            genre = Optional.ofNullable(jdbc.queryForObject("select genre_id, title from genres where genre_id = :id",
                     Map.of("id", id), new GenreDaoJdbc.GenreMapper()));
         } catch (EmptyResultDataAccessException e) {
             genre = Optional.empty();
@@ -44,7 +44,7 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public List<Genre> getAll() {
-        return jdbc.query("select * from genres", new GenreMapper());
+        return jdbc.query("select genre_id, title from genres", new GenreMapper());
     }
 
     @Override
@@ -63,13 +63,13 @@ public class GenreDaoJdbc implements GenreDao {
             jdbc.update("delete from genres where genre_id = :id",
                     Map.of("id", id));
         } catch (DataIntegrityViolationException e) {
-            throw new ReferenceException(String.format("Unable to delete the genre %s there are links in the database", id));
+            throw new DataReferenceException(String.format("Unable to delete the genre %s there are links in the database", id));
         }
     }
 
     @Override
     public List<Genre> getByBookId(long id) {
-        List<Genre> genres = jdbc.query("select * from genres g " +
+        List<Genre> genres = jdbc.query("select g.genre_id, g.title from genres g " +
                 "inner join book_genre bg on bg.genre_id = g.genre_id " +
                 "where bg.book_id = :id", Map.of("id", id), new GenreDaoJdbc.GenreMapper());
         return genres;
@@ -79,7 +79,7 @@ public class GenreDaoJdbc implements GenreDao {
     public Optional<Genre> getByTitle(String title) {
         Optional<Genre> genre;
         try {
-            genre = Optional.ofNullable(jdbc.queryForObject("select * from genres where upper(title) = upper(:title)",
+            genre = Optional.ofNullable(jdbc.queryForObject("select genre_id, title from genres where upper(title) = upper(:title)",
                     Map.of("title", title), new GenreDaoJdbc.GenreMapper()));
         } catch (EmptyResultDataAccessException e) {
             genre = Optional.empty();

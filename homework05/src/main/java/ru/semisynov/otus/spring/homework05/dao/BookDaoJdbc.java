@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import ru.semisynov.otus.spring.homework05.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework05.model.Author;
 import ru.semisynov.otus.spring.homework05.model.Book;
 import ru.semisynov.otus.spring.homework05.model.Genre;
@@ -32,7 +33,7 @@ public class BookDaoJdbc implements BookDao {
         Optional<Book> book;
 
         try {
-            book = Optional.ofNullable(jdbc.queryForObject("select * " +
+            book = Optional.ofNullable(jdbc.queryForObject("select book_id, title " +
                             "from books where book_id = :id",
                     Map.of("id", id), new BookDaoJdbc.BookMapper()));
         } catch (EmptyResultDataAccessException e) {
@@ -43,7 +44,7 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public List<Book> getAll() {
-        List<Book> books = jdbc.query("select * from books", new BookDaoJdbc.BookMapper());
+        List<Book> books = jdbc.query("select book_id, title from books", new BookDaoJdbc.BookMapper());
         return books;
     }
 
@@ -56,17 +57,30 @@ public class BookDaoJdbc implements BookDao {
                 params, kh);
         long newId = kh.getKey() != null ? kh.getKey().longValue() : 0;
         if (newId != 0) {
-            book.getAuthors().forEach(a -> insertBookAuthors(newId, a.getId()));
-            book.getGenres().forEach(g -> insertBookGenres(newId, g.getId()));
+            try {
+                book.getAuthors().forEach(a -> insertBookAuthors(newId, a.getId()));
+                book.getGenres().forEach(g -> insertBookGenres(newId, g.getId()));
+            } catch (Exception e) {
+                deleteBook(newId);
+                deleteBookReferences(newId);
+                throw new DataReferenceException("Error adding link for book");
+            }
         }
-
         return newId;
     }
 
     @Override
     public void deleteById(long id) {
+        deleteBook(id);
+        deleteBookReferences(id);
+    }
+
+    private void deleteBook(long id) {
         jdbc.update("delete from books where book_id = :id",
                 Map.of("id", id));
+    }
+
+    private void deleteBookReferences(long id) {
         jdbc.update("delete from book_author where book_id = :id",
                 Map.of("id", id));
         jdbc.update("delete from book_genre where book_id = :id",

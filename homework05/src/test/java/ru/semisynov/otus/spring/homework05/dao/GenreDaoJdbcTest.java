@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
+import ru.semisynov.otus.spring.homework05.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework05.errors.ItemNotFoundException;
-import ru.semisynov.otus.spring.homework05.errors.ReferenceException;
 import ru.semisynov.otus.spring.homework05.model.Genre;
 
 import java.util.List;
@@ -71,7 +71,7 @@ class GenreDaoJdbcTest {
     @DisplayName("не удаляет жанр из БД есть связь")
     @Test
     void shouldNotDeleteGenre() {
-        assertThrows(ReferenceException.class, () -> genreDao.deleteById(2L));
+        assertThrows(DataReferenceException.class, () -> genreDao.deleteById(2L));
     }
 
     @DisplayName("возвращает список всех жанров по id книги")

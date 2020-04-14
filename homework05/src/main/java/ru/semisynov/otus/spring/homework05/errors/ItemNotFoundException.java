@@ -1,8 +1,10 @@
 package ru.semisynov.otus.spring.homework05.errors;
 
-public class ItemNotFoundException extends RuntimeException {
+import ru.semisynov.otus.spring.homework05.errors.enums.ReturnCodeEnum;
+
+public class ItemNotFoundException extends LibraryException {
 
     public ItemNotFoundException(String message) {
-        super(message);
+        super(message, ReturnCodeEnum.ITEM_NOT_FOUND);
     }
 }
