@@ -1,6 +1,5 @@
 package ru.semisynov.otus.spring.homework04.dao;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
 @DisplayName("Класс QuestionDao ")
-@Ignore
 class QuestionDaoImplTest {
 
     @Autowired
