@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: development
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    database: postgresql
+    properties:
+      hibernate:
+        format_sql: true
+---
+spring:
+  profiles: development
+logging:
+  level:
+    root: INFO
+---
+spring:
+  profiles: production
+logging:
+  level:
+    root: ERROR
