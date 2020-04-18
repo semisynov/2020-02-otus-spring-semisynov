@@ -11,4 +11,6 @@ public interface CommentService {
     String saveComment(String text, long bookId);
 
     String deleteCommentById(long id);
+
+    String getAllBookComments(long bookId);
 }

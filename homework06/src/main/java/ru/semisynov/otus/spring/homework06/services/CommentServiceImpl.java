@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.semisynov.otus.spring.homework06.dao.BookRepository;
-import ru.semisynov.otus.spring.homework06.dao.CommentRepository;
 import ru.semisynov.otus.spring.homework06.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework06.model.Book;
 import ru.semisynov.otus.spring.homework06.model.Comment;
+import ru.semisynov.otus.spring.homework06.repositories.BookRepository;
+import ru.semisynov.otus.spring.homework06.repositories.CommentRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService {
     private static final String TEXT_NOT_FOUND = "Comment not found";
     private static final String TEXT_BOOK_NOT_FOUND = "Book not found";
     private static final String TEXT_COUNT = "Comments in the database: %s";
-    private static final String TEXT_NEW = "New comment id: %s, name: %s";
+    private static final String TEXT_NEW = "New comment id: %s, book: %s";
     private static final String TEXT_DELETED = "Successfully deleted comment id: %s, book: %s";
 
     @Override
@@ -68,5 +68,17 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
         commentRepository.deleteById(comment.getId());
         return String.format(TEXT_DELETED, comment.getId(), comment.getBook().getTitle());
+    }
+
+    @Override
+    public String getAllBookComments(long bookId) {
+        List<Comment> comments = commentRepository.findAllByBook(bookId);
+        String commentsResult;
+        if (comments.isEmpty()) {
+            commentsResult = TEXT_EMPTY;
+        } else {
+            commentsResult = comments.stream().map(Comment::toString).collect(Collectors.joining("\n"));
+        }
+        return commentsResult;
     }
 }

@@ -117,6 +117,7 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_book_comment
                     references: books(book_id)
+                    deleteCascade: true
               - column:
                   name: date_time
                   type: timestamp

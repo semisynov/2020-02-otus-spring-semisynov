@@ -58,4 +58,15 @@ public class CommentController {
         }
         return result;
     }
+
+    @ShellMethod(value = "Get all book comments", key = {"cb", "commentsBook"})
+    public String getBookCommentsList(@ShellOption(help = "Book id") String bookId) {
+        String result;
+        try {
+            result = commentService.getAllBookComments(Long.parseLong(bookId));
+        } catch (NumberFormatException e) {
+            throw new BadParameterException(BAD_BOOK_ID_PARAMETER);
+        }
+        return result;
+    }
 }

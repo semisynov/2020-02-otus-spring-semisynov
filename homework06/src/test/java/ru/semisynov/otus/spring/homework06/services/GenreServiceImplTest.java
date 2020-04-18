@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
-import ru.semisynov.otus.spring.homework06.dao.GenreRepository;
 import ru.semisynov.otus.spring.homework06.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework06.model.Genre;
+import ru.semisynov.otus.spring.homework06.repositories.GenreRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(properties = {
@@ -39,13 +40,13 @@ class GenreServiceImplTest {
 
     private static final long EXPECTED_COUNT = 1L;
     private static final long EXPECTED_ID = 1L;
-    private static final String EXPECTED_NAME = "Test";
-    private static final Genre EXPECTED_ENTITY = new Genre(EXPECTED_ID, EXPECTED_NAME);
+    private static final String EXPECTED_TITLE = "Test";
+    private static final Genre EXPECTED_ENTITY = new Genre(EXPECTED_ID, EXPECTED_TITLE);
 
     private static final String TEXT_EMPTY = "There are no genres in database";
     private static final String TEXT_COUNT = String.format("Genres in the database: %s", EXPECTED_COUNT);
-    private static final String TEXT_BY_ID = String.format("Genre(id=%s, title=%s)", EXPECTED_ID, EXPECTED_NAME);
-    private static final String TEXT_NEW = "New genre id: 2, name: Test2";
+    private static final String TEXT_BY_ID = String.format("Genre(id=%s, title=%s)", EXPECTED_ID, EXPECTED_TITLE);
+    private static final String TEXT_NEW = "New genre id: %s, name: %s";
 
     @MockBean
     private GenreRepository genreRepository;
@@ -78,7 +79,7 @@ class GenreServiceImplTest {
     }
 
     @Test
-    @DisplayName("возвращает ошибку поиска жанра по её id")
+    @DisplayName("возвращает ошибку поиска жанра по его id")
     void shouldReturnItemNotFoundException() {
         assertThrows(ItemNotFoundException.class, () -> genreService.getGenreById(2L));
     }
@@ -86,9 +87,10 @@ class GenreServiceImplTest {
     @Test
     @DisplayName("создает новый жанр")
     void shouldCreateGenre() {
-//        when(genreRepository.save(any())).thenReturn(2L);
-//        String result = genreService.createGenre("Test2");
-//        assertEquals(result, TEXT_NEW);
+        Genre testGenre = new Genre(10L, EXPECTED_TITLE);
+        when(genreRepository.save(any())).thenReturn(testGenre);
+        String result = genreService.createGenre(EXPECTED_TITLE);
+        assertEquals(result, String.format(TEXT_NEW, 10L, EXPECTED_TITLE));
     }
 
     @Test

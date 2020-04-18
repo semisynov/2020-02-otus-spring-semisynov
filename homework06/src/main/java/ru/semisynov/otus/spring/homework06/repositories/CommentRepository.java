@@ -1,4 +1,4 @@
-package ru.semisynov.otus.spring.homework06.dao;
+package ru.semisynov.otus.spring.homework06.repositories;
 
 import ru.semisynov.otus.spring.homework06.model.Comment;
 
@@ -16,4 +16,6 @@ public interface CommentRepository {
     Comment save(Comment comment);
 
     void deleteById(long id);
+
+    List<Comment> findAllByBook(long bookId);
 }

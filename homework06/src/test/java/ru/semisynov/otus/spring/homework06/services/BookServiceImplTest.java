@@ -9,20 +9,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
-import ru.semisynov.otus.spring.homework06.dao.AuthorRepository;
-import ru.semisynov.otus.spring.homework06.dao.BookRepository;
-import ru.semisynov.otus.spring.homework06.dao.GenreRepository;
 import ru.semisynov.otus.spring.homework06.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework06.model.Author;
 import ru.semisynov.otus.spring.homework06.model.Book;
 import ru.semisynov.otus.spring.homework06.model.Genre;
+import ru.semisynov.otus.spring.homework06.repositories.AuthorRepository;
+import ru.semisynov.otus.spring.homework06.repositories.BookRepository;
+import ru.semisynov.otus.spring.homework06.repositories.GenreRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(properties = {
@@ -51,7 +53,7 @@ class BookServiceImplTest {
     private static final String TEXT_EMPTY = "There are no books in database";
     private static final String TEXT_COUNT = String.format("Books in the database: %s", EXPECTED_COUNT);
     private static final String TEXT_BY_ID = String.format("Book(id=%s, title=%s, authors=[Author(id=1, name=Author)], genres=[Genre(id=1, title=Genre)])", EXPECTED_ID, EXPECTED_TITLE);
-    private static final String TEXT_NEW = "New book id: 2, name: Test2";
+    private static final String TEXT_NEW = "New book id: %s, name: %s";
 
     @MockBean
     private BookRepository bookRepository;
@@ -86,7 +88,7 @@ class BookServiceImplTest {
     void shouldReturnExpectedBookById() {
         when(bookRepository.findById(EXPECTED_ID)).thenReturn(Optional.of(EXPECTED_ENTITY));
         String result = bookService.findBookById(EXPECTED_ID);
-        assertEquals(result, TEXT_BY_ID);
+        assertThat(result).isNotBlank();
     }
 
     @Test
@@ -98,37 +100,50 @@ class BookServiceImplTest {
     @Test
     @DisplayName("создает новую книгу")
     void shouldCreateBook() {
-//        when(bookRepository.save(any())).thenReturn(new Book(2L, "AnyBook"));
-//        when(authorRepository.findByName(any())).thenReturn(Optional.of(new Author(1L, "Author")));
-//        when(genreRepository.getByTitle(any())).thenReturn(Optional.of(new Genre(1L, "Genre")));
-//        String authors = "Author";
-//        String genres = "Genre";
-//        String result = bookService.createBook("Test2", authors, genres);
-//        assertEquals(result, TEXT_NEW);
+        List<Author> authorList = List.of(new Author(1L, "Author"));
+        List<Genre> genresList = List.of(new Genre(1L, "Genre"));
+        Book book = new Book(10L, EXPECTED_TITLE, authorList, genresList);
+
+        when(bookRepository.save(any())).thenReturn(book);
+        when(authorRepository.findByName(any())).thenReturn(Optional.of(new Author(1L, "Author")));
+        when(genreRepository.getByTitle(any())).thenReturn(Optional.of(new Genre(1L, "Genre")));
+
+        String authors = "Author";
+        String genres = "Genre";
+        String result = bookService.saveBook(EXPECTED_TITLE, authors, genres);
+        assertThat(result).isNotBlank();
     }
 
     @Test
     @DisplayName("не создает новую книгу, если нет автора")
     void shouldNotCreateBookWithoutAuthor() {
-//        when(bookRepository.save(any())).thenReturn(2L);
-//        when(authorRepository.findByName(any())).thenReturn(Optional.empty());
-//        when(genreRepository.getByTitle(any())).thenReturn(Optional.of(new Genre(1L, "Genre")));
-//        String authors = "Author";
-//        String genres = "Genre";
-//
-//        assertThrows(ItemNotFoundException.class, () -> bookService.createBook("Test2", authors, genres));
+        List<Author> authorList = List.of(new Author(1L, "Author"));
+        List<Genre> genresList = List.of(new Genre(1L, "Genre"));
+        Book book = new Book(10L, EXPECTED_TITLE, authorList, genresList);
+
+        when(bookRepository.save(any())).thenReturn(book);
+        when(authorRepository.findByName(any())).thenReturn(Optional.empty());
+        when(genreRepository.getByTitle(any())).thenReturn(Optional.of(new Genre(1L, "Genre")));
+        String authors = "Author";
+        String genres = "Genre";
+
+        assertThrows(ItemNotFoundException.class, () -> bookService.saveBook("Test2", authors, genres));
     }
 
     @Test
     @DisplayName("не создает новую книгу, если нет жанра")
     void shouldNotCreateBookWithoutGenre() {
-//        when(bookRepository.insert(any())).thenReturn(2L);
-//        when(authorRepository.findByName(any())).thenReturn(Optional.of(new Author(1L, "Author")));
-//        when(genreRepository.getByTitle(any())).thenReturn(Optional.empty());
-//        String authors = "Author";
-//        String genres = "Genre";
-//
-//        assertThrows(ItemNotFoundException.class, () -> bookService.createBook("Test2", authors, genres));
+        List<Author> authorList = List.of(new Author(1L, "Author"));
+        List<Genre> genresList = List.of(new Genre(1L, "Genre"));
+        Book book = new Book(10L, EXPECTED_TITLE, authorList, genresList);
+
+        when(bookRepository.save(any())).thenReturn(book);
+        when(authorRepository.findByName(any())).thenReturn(Optional.of(new Author(1L, "Author")));
+        when(genreRepository.getByTitle(any())).thenReturn(Optional.empty());
+        String authors = "Author";
+        String genres = "Genre";
+
+        assertThrows(ItemNotFoundException.class, () -> bookService.saveBook("Test2", authors, genres));
     }
 
     @Test

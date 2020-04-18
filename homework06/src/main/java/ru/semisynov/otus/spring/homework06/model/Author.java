@@ -9,9 +9,9 @@ import javax.persistence.*;
 
 @Getter
 @ToString
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "authors")
 public class Author {
 

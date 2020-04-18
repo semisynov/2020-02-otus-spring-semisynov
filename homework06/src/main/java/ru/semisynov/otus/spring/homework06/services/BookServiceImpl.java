@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.semisynov.otus.spring.homework06.dao.AuthorRepository;
-import ru.semisynov.otus.spring.homework06.dao.BookRepository;
-import ru.semisynov.otus.spring.homework06.dao.GenreRepository;
 import ru.semisynov.otus.spring.homework06.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework06.model.Author;
 import ru.semisynov.otus.spring.homework06.model.Book;
 import ru.semisynov.otus.spring.homework06.model.Genre;
+import ru.semisynov.otus.spring.homework06.repositories.AuthorRepository;
+import ru.semisynov.otus.spring.homework06.repositories.BookRepository;
+import ru.semisynov.otus.spring.homework06.repositories.GenreRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -78,16 +78,14 @@ public class BookServiceImpl implements BookService {
     }
 
     private List<Author> parseBookAuthors(String authorList) {
-        List<Author> authors = Arrays.stream(authorList.split(","))
+        return Arrays.stream(authorList.split(","))
                 .map(l -> authorRepository.findByName(l).orElseThrow(() -> new ItemNotFoundException(String.format(TEXT_AUTHOR_NOT_FOUND, l))))
                 .collect(Collectors.toList());
-        return authors;
     }
 
     private List<Genre> parseBookGenres(String genresList) {
-        List<Genre> genres = Arrays.stream(genresList.split(","))
+        return Arrays.stream(genresList.split(","))
                 .map(l -> genreRepository.getByTitle(l).orElseThrow(() -> new ItemNotFoundException(String.format(TEXT_GENRE_NOT_FOUND, l))))
                 .collect(Collectors.toList());
-        return genres;
     }
 }

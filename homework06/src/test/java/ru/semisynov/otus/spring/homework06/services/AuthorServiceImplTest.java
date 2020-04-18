@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
-import ru.semisynov.otus.spring.homework06.dao.AuthorRepository;
 import ru.semisynov.otus.spring.homework06.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework06.model.Author;
+import ru.semisynov.otus.spring.homework06.repositories.AuthorRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
@@ -46,7 +47,7 @@ class AuthorServiceImplTest {
     private static final String TEXT_EMPTY = "There are no authors in database";
     private static final String TEXT_COUNT = String.format("Authors in the database: %s", EXPECTED_COUNT);
     private static final String TEXT_BY_ID = String.format("Author(id=%s, name=%s)", EXPECTED_ID, EXPECTED_NAME);
-    private static final String TEXT_NEW = "New author id: 2, name: Test2";
+    private static final String TEXT_NEW = "New author id: %s, name: %s";
 
     @MockBean
     private AuthorRepository authorRepository;
@@ -71,7 +72,7 @@ class AuthorServiceImplTest {
     }
 
     @Test
-    @DisplayName("возвращает заданного автора по её id")
+    @DisplayName("возвращает заданного автора по его id")
     void shouldReturnExpectedAuthorById() {
         when(authorRepository.findById(EXPECTED_ID)).thenReturn(Optional.of(EXPECTED_ENTITY));
         String result = authorService.findAuthorById(EXPECTED_ID);
@@ -79,18 +80,19 @@ class AuthorServiceImplTest {
     }
 
     @Test
-    @DisplayName("возвращает ошибку поиска автора по её id")
+    @DisplayName("возвращает ошибку поиска автора по его id")
     void shouldReturnItemNotFoundException() {
         assertThrows(ItemNotFoundException.class, () -> authorService.findAuthorById(2L));
     }
 
-//    @Test
-//    @DisplayName("создает нового автора")
-//    void shouldCreateAuthor() {
-//        when(authorRepository.save(any())).thenReturn(2L);
-//        String result = authorService.createAuthor("Test2");
-//        assertEquals(result, TEXT_NEW);
-//    }
+    @Test
+    @DisplayName("создает нового автора")
+    void shouldCreateAuthor() {
+        Author testAuthor = new Author(10L, EXPECTED_NAME);
+        when(authorRepository.save(any())).thenReturn(testAuthor);
+        String result = authorService.saveAuthor(EXPECTED_NAME);
+        assertEquals(result, String.format(TEXT_NEW, 10L, EXPECTED_NAME));
+    }
 
     @Test
     @DisplayName("возвращает всех авторов")

@@ -1,12 +1,10 @@
-package ru.semisynov.otus.spring.homework06.dao;
+package ru.semisynov.otus.spring.homework06.repositories;
 
 import org.springframework.stereotype.Repository;
+import ru.semisynov.otus.spring.homework06.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework06.model.Author;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +47,11 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     public void deleteById(long id) {
         Query query = em.createQuery("delete from Author where id = :id");
         query.setParameter("id", id);
-        query.executeUpdate();
+        try {
+            query.executeUpdate();
+        } catch (PersistenceException e) {
+            throw new DataReferenceException(String.format("Unable to delete the author %s there are links in the database", id));
+        }
     }
 
     @Override

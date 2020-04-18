@@ -1,4 +1,4 @@
-package ru.semisynov.otus.spring.homework06.dao;
+package ru.semisynov.otus.spring.homework06.repositories;
 
 import ru.semisynov.otus.spring.homework06.model.Author;
 

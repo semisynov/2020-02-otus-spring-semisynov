@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,15 +27,15 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 5)
+    @Fetch(FetchMode.SUBSELECT)
+    @BatchSize(size = 5)
     @ManyToMany(targetEntity = Author.class, fetch = FetchType.LAZY)
     @JoinTable(name = "book_author", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Author> authors;
 
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 5)
+    @Fetch(FetchMode.SUBSELECT)
+    @BatchSize(size = 5)
     @ManyToMany(targetEntity = Genre.class, fetch = FetchType.LAZY)
     @JoinTable(name = "book_genre", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))

@@ -1,4 +1,4 @@
-package ru.semisynov.otus.spring.homework06.dao;
+package ru.semisynov.otus.spring.homework06.repositories;
 
 import org.springframework.stereotype.Repository;
 import ru.semisynov.otus.spring.homework06.model.Book;

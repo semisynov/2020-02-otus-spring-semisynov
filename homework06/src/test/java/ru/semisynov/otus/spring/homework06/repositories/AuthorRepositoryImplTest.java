@@ -1,4 +1,4 @@
-package ru.semisynov.otus.spring.homework06.dao;
+package ru.semisynov.otus.spring.homework06.repositories;
 
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -8,14 +8,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.semisynov.otus.spring.homework06.errors.DataReferenceException;
-import ru.semisynov.otus.spring.homework06.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework06.model.Author;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Repository для работы с авторами книг ")
@@ -23,15 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Import(AuthorRepositoryImpl.class)
 class AuthorRepositoryImplTest {
 
+    private static final int EXPECTED_QUERIES_COUNT = 1;
     private static final int EXPECTED_AUTHORS_COUNT = 3;
-    private static final String EXPECTED_AUTHOR_NAME_1 = "AnyAuthor1";
-    private static final long EXPECTED_BOOK_ID = 3L;
-    private static final int EXPECTED_BOOK_AUTHOR_COUNT = 2;
-    private static final String TEXT_NOT_FOUND = "Author not found";
-
     private static final long FIRST_ID = 1L;
-
-    private static final int EXPECTED_QUERIES_COUNT =  1;
+    private static final String EXPECTED_AUTHOR_NAME_1 = "AnyAuthor1";
 
     @Autowired
     private AuthorRepository authorRepository;
@@ -49,7 +42,7 @@ class AuthorRepositoryImplTest {
     @DisplayName("возвращает заданного автора по его id")
     @Test
     void shouldReturnExpectedAuthorById() {
-        Optional<Author> optionalAuthor = authorRepository.findById(1L);
+        Optional<Author> optionalAuthor = authorRepository.findById(FIRST_ID);
         Author expectedAuthor = entityManager.find(Author.class, FIRST_ID);
         assertThat(optionalAuthor).isPresent().get()
                 .isEqualToComparingFieldByField(expectedAuthor);
@@ -61,6 +54,7 @@ class AuthorRepositoryImplTest {
         SessionFactory sessionFactory = entityManager.getEntityManager().getEntityManagerFactory()
                 .unwrap(SessionFactory.class);
         sessionFactory.getStatistics().setStatisticsEnabled(true);
+
         List<Author> authors = authorRepository.findAll();
         assertThat(authors).isNotNull().hasSize(EXPECTED_AUTHORS_COUNT)
                 .allMatch(a -> !a.getName().equals(""));
@@ -102,7 +96,9 @@ class AuthorRepositoryImplTest {
     @DisplayName("возвращает заданного автора по его имени")
     @Test
     void shouldReturnExpectedAuthorByName() {
-        Author author = authorRepository.findByName(EXPECTED_AUTHOR_NAME_1).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
-        assertEquals(author.getName(), EXPECTED_AUTHOR_NAME_1);
+        Optional<Author> optionalAuthor = authorRepository.findByName(EXPECTED_AUTHOR_NAME_1);
+        Author expectedAuthor = entityManager.find(Author.class, FIRST_ID);
+        assertThat(optionalAuthor).isPresent().get()
+                .isEqualToComparingFieldByField(expectedAuthor);
     }
 }

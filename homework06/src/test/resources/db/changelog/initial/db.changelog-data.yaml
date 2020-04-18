@@ -79,7 +79,7 @@ databaseChangeLog:
                   value: 1
               - column:
                   name: genre_id
-                  value: 1
+                  value: 2
         - insert:
             tableName: book_author
             columns:
@@ -133,7 +133,7 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: genre_id
-                  value: 1
+                  value: 2
         - insert:
             tableName: book_genre
             columns:
@@ -142,15 +142,6 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: genre_id
-                  value: 2
-        - insert:
-            tableName: book_author
-            columns:
-              - column:
-                  name: book_id
-                  value: 3
-              - column:
-                  name: author_id
                   value: 3
         - insert:
             tableName: book_author
@@ -160,4 +151,49 @@ databaseChangeLog:
                   value: 3
               - column:
                   name: author_id
+                  value: 3
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 3
+              - column:
+                  name: author_id
                   value: 2
+        - insert:
+            tableName: comments
+            columns:
+              - column:
+                  name: book_id
+                  value: 1
+              - column:
+                  name: date_time
+                  value: "2020-04-18T13:05:27.434135"
+              - column:
+                  name: text
+                  value: "AnyComment1"
+        - insert:
+            tableName: comments
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: date_time
+                  value: "2020-04-18T13:05:27.434135"
+              - column:
+                  name: text
+                  value: "AnyComment2"
+        - insert:
+            tableName: comments
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: date_time
+                  value: "2020-04-18T13:05:27.434135"
+              - column:
+                  name: text
+                  value: "AnyComment3"
