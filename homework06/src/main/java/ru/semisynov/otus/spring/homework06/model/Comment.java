@@ -3,13 +3,11 @@ package ru.semisynov.otus.spring.homework06.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -27,7 +25,12 @@ public class Comment {
     @Column(name = "text")
     private String text;
 
-    @ManyToOne(targetEntity = Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Book.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
     private Book book;
+
+    @Override
+    public String toString() {
+        return "Comment. Book title=" + book.getTitle() + ", dateTime=" + dateTime + ", text=" + text;
+    }
 }

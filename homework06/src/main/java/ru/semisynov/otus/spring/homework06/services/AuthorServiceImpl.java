@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service("authorService")
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
@@ -51,7 +50,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public String saveAuthor(String name) {
+    public String addAuthor(String name) {
         Author author = authorRepository.save(new Author(0L, name));
         return String.format(TEXT_NEW, author.getId(), author.getName());
     }
@@ -60,7 +59,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     public String deleteAuthorById(long id) {
         Author author = authorRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
-        authorRepository.deleteById(author.getId());
+        authorRepository.delete(author);
         return String.format(TEXT_DELETED, author.getId(), author.getName());
     }
 }

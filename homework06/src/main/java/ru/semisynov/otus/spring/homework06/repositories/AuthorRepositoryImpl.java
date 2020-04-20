@@ -1,10 +1,11 @@
 package ru.semisynov.otus.spring.homework06.repositories;
 
 import org.springframework.stereotype.Repository;
-import ru.semisynov.otus.spring.homework06.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework06.model.Author;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,23 +13,23 @@ import java.util.Optional;
 public class AuthorRepositoryImpl implements AuthorRepository {
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     @Override
     public long count() {
-        TypedQuery<Long> query = em.createQuery("select count(a) " +
+        TypedQuery<Long> query = entityManager.createQuery("select count(a) " +
                 "from Author a ", Long.class);
         return query.getSingleResult();
     }
 
     @Override
     public Optional<Author> findById(long id) {
-        return Optional.ofNullable(em.find(Author.class, id));
+        return Optional.ofNullable(entityManager.find(Author.class, id));
     }
 
     @Override
     public List<Author> findAll() {
-        TypedQuery<Author> typedQuery = em.createQuery("select a " +
+        TypedQuery<Author> typedQuery = entityManager.createQuery("select a " +
                 "from Author a ", Author.class);
         return typedQuery.getResultList();
     }
@@ -36,27 +37,21 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     @Override
     public Author save(Author author) {
         if (author.getId() == 0) {
-            em.persist(author);
+            entityManager.persist(author);
             return author;
         } else {
-            return em.merge(author);
+            return entityManager.merge(author);
         }
     }
 
     @Override
-    public void deleteById(long id) {
-        Query query = em.createQuery("delete from Author where id = :id");
-        query.setParameter("id", id);
-        try {
-            query.executeUpdate();
-        } catch (PersistenceException e) {
-            throw new DataReferenceException(String.format("Unable to delete the author %s there are links in the database", id));
-        }
+    public void delete(Author author) {
+        entityManager.remove(author);
     }
 
     @Override
     public Optional<Author> findByName(String name) {
-        TypedQuery<Author> typedQuery = em.createQuery(
+        TypedQuery<Author> typedQuery = entityManager.createQuery(
                 "select a " +
                         "from Author a " +
                         "where upper(a.name) = upper(:name)"

@@ -38,7 +38,7 @@ public class AuthorController {
 
     @ShellMethod(value = "Create new author", key = {"ac", "authorCreate"})
     public String createAuthor(@ShellOption(help = "Author name") String name) {
-        return authorService.saveAuthor(name);
+        return authorService.addAuthor(name);
     }
 
     @ShellMethod(value = "Delete author", key = {"ad", "authorDelete"})

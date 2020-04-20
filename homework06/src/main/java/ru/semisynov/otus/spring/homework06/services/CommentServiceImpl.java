@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service("commentService")
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -27,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
     private static final String TEXT_NOT_FOUND = "Comment not found";
     private static final String TEXT_BOOK_NOT_FOUND = "Book not found";
     private static final String TEXT_COUNT = "Comments in the database: %s";
-    private static final String TEXT_NEW = "New comment id: %s, book: %s";
+    private static final String TEXT_NEW = "New comment text: %s, book: %s";
     private static final String TEXT_DELETED = "Successfully deleted comment id: %s, book: %s";
 
     @Override
@@ -37,12 +36,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public String getCommentById(long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
         return comment.toString();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public String getAllComments() {
         List<Comment> comments = commentRepository.findAll();
         String commentsResult;
@@ -56,23 +57,25 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public String saveComment(String text, long bookId) {
+    public String addComment(String text, long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new ItemNotFoundException(TEXT_BOOK_NOT_FOUND));
-        Comment comment = commentRepository.save(new Comment(0L, LocalDateTime.now(), text, book));
-        return String.format(TEXT_NEW, comment.getId(), comment.getBook().getTitle());
+        commentRepository.add(new Comment(0L, LocalDateTime.now(), text, book));
+        return String.format(TEXT_NEW, text, book.getTitle());
     }
 
     @Override
     @Transactional
     public String deleteCommentById(long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
-        commentRepository.deleteById(comment.getId());
+        commentRepository.delete(comment);
         return String.format(TEXT_DELETED, comment.getId(), comment.getBook().getTitle());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public String getAllBookComments(long bookId) {
-        List<Comment> comments = commentRepository.findAllByBook(bookId);
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ItemNotFoundException(TEXT_BOOK_NOT_FOUND));
+        List<Comment> comments = book.getComments();
         String commentsResult;
         if (comments.isEmpty()) {
             commentsResult = TEXT_EMPTY;

@@ -89,7 +89,7 @@ class GenreServiceImplTest {
     void shouldCreateGenre() {
         Genre testGenre = new Genre(10L, EXPECTED_TITLE);
         when(genreRepository.save(any())).thenReturn(testGenre);
-        String result = genreService.createGenre(EXPECTED_TITLE);
+        String result = genreService.addGenre(EXPECTED_TITLE);
         assertEquals(result, String.format(TEXT_NEW, 10L, EXPECTED_TITLE));
     }
 

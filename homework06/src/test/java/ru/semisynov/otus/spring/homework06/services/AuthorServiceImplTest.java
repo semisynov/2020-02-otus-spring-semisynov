@@ -90,7 +90,7 @@ class AuthorServiceImplTest {
     void shouldCreateAuthor() {
         Author testAuthor = new Author(10L, EXPECTED_NAME);
         when(authorRepository.save(any())).thenReturn(testAuthor);
-        String result = authorService.saveAuthor(EXPECTED_NAME);
+        String result = authorService.addAuthor(EXPECTED_NAME);
         assertEquals(result, String.format(TEXT_NEW, 10L, EXPECTED_NAME));
     }
 

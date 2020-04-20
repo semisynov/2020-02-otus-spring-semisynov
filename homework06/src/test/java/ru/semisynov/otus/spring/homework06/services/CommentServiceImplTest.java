@@ -19,6 +19,7 @@ import ru.semisynov.otus.spring.homework06.repositories.BookRepository;
 import ru.semisynov.otus.spring.homework06.repositories.CommentRepository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,7 +27,6 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -62,7 +62,7 @@ class CommentServiceImplTest {
         List<Author> authors = List.of(new Author(1L, "Test"));
         List<Genre> genres = List.of(new Genre(1L, "Test"));
 
-        Book book = new Book(EXPECTED_BOOK_ID, "Test", authors, genres);
+        Book book = new Book(EXPECTED_BOOK_ID, "Test", authors, genres, Collections.emptyList());
         EXPECTED_ENTITY = new Comment(EXPECTED_ID, LocalDateTime.now(), EXPECTED_TEXT, book);
     }
 
@@ -111,9 +111,8 @@ class CommentServiceImplTest {
     @DisplayName("создает новый комментарий")
     void shouldCreateComment() {
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(EXPECTED_ENTITY.getBook()));
-        when(commentRepository.save(any())).thenReturn(EXPECTED_ENTITY);
 
-        String result = commentService.saveComment(EXPECTED_TEXT, EXPECTED_BOOK_ID);
+        String result = commentService.addComment(EXPECTED_TEXT, EXPECTED_BOOK_ID);
         assertThat(result).isNotBlank();
     }
 
@@ -124,16 +123,6 @@ class CommentServiceImplTest {
         when(commentRepository.findAll()).thenReturn(comments);
 
         String result = commentService.getAllComments();
-        assertEquals(result, comments.stream().map(Comment::toString).collect(Collectors.joining("\n")));
-    }
-
-    @Test
-    @DisplayName("возвращает все комментарии для книги")
-    void shouldReturnAllBookComments() {
-        List<Comment> comments = List.of(EXPECTED_ENTITY);
-        when(commentRepository.findAllByBook(EXPECTED_BOOK_ID)).thenReturn(comments);
-
-        String result = commentService.getAllBookComments(EXPECTED_BOOK_ID);
         assertEquals(result, comments.stream().map(Comment::toString).collect(Collectors.joining("\n")));
     }
 }

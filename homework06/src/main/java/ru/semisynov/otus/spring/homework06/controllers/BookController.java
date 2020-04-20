@@ -38,7 +38,7 @@ public class BookController {
 
     @ShellMethod(value = "Create new book", key = {"bc", "bookCreate"})
     public String createBook(@ShellOption(help = "Book title") String title, String authors, String genres) {
-        return bookService.saveBook(title, authors, genres);
+        return bookService.addBook(title, authors, genres);
     }
 
     @ShellMethod(value = "Delete book", key = {"bd", "bookDelete"})

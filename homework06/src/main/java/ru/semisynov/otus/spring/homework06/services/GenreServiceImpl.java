@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service("genreService")
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
@@ -51,7 +50,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional
-    public String createGenre(String title) {
+    public String addGenre(String title) {
         Genre genre = genreRepository.save(new Genre(0L, title));
         return String.format(TEXT_NEW, genre.getId(), genre.getTitle());
     }
@@ -60,7 +59,7 @@ public class GenreServiceImpl implements GenreService {
     @Transactional
     public String deleteGenreById(long id) {
         Genre genre = genreRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
-        genreRepository.deleteById(genre.getId());
+        genreRepository.delete(genre);
         return String.format(TEXT_DELETED, genre.getId(), genre.getTitle());
     }
 }

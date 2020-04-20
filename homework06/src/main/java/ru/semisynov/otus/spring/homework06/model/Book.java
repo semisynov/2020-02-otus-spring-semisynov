@@ -3,16 +3,15 @@ package ru.semisynov.otus.spring.homework06.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -40,4 +39,13 @@ public class Book {
     @JoinTable(name = "book_genre", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
+
+    @OneToMany(targetEntity = Comment.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private List<Comment> comments;
+
+    @Override
+    public String toString() {
+        return "Book. Id=" + id + "Title=" + title + ", authors=" + authors.stream().map(Author::getName).collect(Collectors.joining(",")).trim();
+    }
 }

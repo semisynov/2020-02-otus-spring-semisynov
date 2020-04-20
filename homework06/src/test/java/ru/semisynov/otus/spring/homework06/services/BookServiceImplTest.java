@@ -17,6 +17,7 @@ import ru.semisynov.otus.spring.homework06.repositories.AuthorRepository;
 import ru.semisynov.otus.spring.homework06.repositories.BookRepository;
 import ru.semisynov.otus.spring.homework06.repositories.GenreRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,7 +49,7 @@ class BookServiceImplTest {
     private static final String EXPECTED_TITLE = "Test";
     private static final List<Author> AUTHORS = List.of(new Author(1L, "Author"));
     private static final List<Genre> GENRES = List.of(new Genre(1L, "Genre"));
-    private static final Book EXPECTED_ENTITY = new Book(EXPECTED_ID, EXPECTED_TITLE, AUTHORS, GENRES);
+    private static final Book EXPECTED_ENTITY = new Book(EXPECTED_ID, EXPECTED_TITLE, AUTHORS, GENRES, Collections.emptyList());
 
     private static final String TEXT_EMPTY = "There are no books in database";
     private static final String TEXT_COUNT = String.format("Books in the database: %s", EXPECTED_COUNT);
@@ -102,7 +103,7 @@ class BookServiceImplTest {
     void shouldCreateBook() {
         List<Author> authorList = List.of(new Author(1L, "Author"));
         List<Genre> genresList = List.of(new Genre(1L, "Genre"));
-        Book book = new Book(10L, EXPECTED_TITLE, authorList, genresList);
+        Book book = new Book(10L, EXPECTED_TITLE, authorList, genresList, Collections.emptyList());
 
         when(bookRepository.save(any())).thenReturn(book);
         when(authorRepository.findByName(any())).thenReturn(Optional.of(new Author(1L, "Author")));
@@ -110,7 +111,7 @@ class BookServiceImplTest {
 
         String authors = "Author";
         String genres = "Genre";
-        String result = bookService.saveBook(EXPECTED_TITLE, authors, genres);
+        String result = bookService.addBook(EXPECTED_TITLE, authors, genres);
         assertThat(result).isNotBlank();
     }
 
@@ -119,7 +120,7 @@ class BookServiceImplTest {
     void shouldNotCreateBookWithoutAuthor() {
         List<Author> authorList = List.of(new Author(1L, "Author"));
         List<Genre> genresList = List.of(new Genre(1L, "Genre"));
-        Book book = new Book(10L, EXPECTED_TITLE, authorList, genresList);
+        Book book = new Book(10L, EXPECTED_TITLE, authorList, genresList, Collections.emptyList());
 
         when(bookRepository.save(any())).thenReturn(book);
         when(authorRepository.findByName(any())).thenReturn(Optional.empty());
@@ -127,7 +128,7 @@ class BookServiceImplTest {
         String authors = "Author";
         String genres = "Genre";
 
-        assertThrows(ItemNotFoundException.class, () -> bookService.saveBook("Test2", authors, genres));
+        assertThrows(ItemNotFoundException.class, () -> bookService.addBook("Test2", authors, genres));
     }
 
     @Test
@@ -135,7 +136,7 @@ class BookServiceImplTest {
     void shouldNotCreateBookWithoutGenre() {
         List<Author> authorList = List.of(new Author(1L, "Author"));
         List<Genre> genresList = List.of(new Genre(1L, "Genre"));
-        Book book = new Book(10L, EXPECTED_TITLE, authorList, genresList);
+        Book book = new Book(10L, EXPECTED_TITLE, authorList, genresList, Collections.emptyList());
 
         when(bookRepository.save(any())).thenReturn(book);
         when(authorRepository.findByName(any())).thenReturn(Optional.of(new Author(1L, "Author")));
@@ -143,7 +144,7 @@ class BookServiceImplTest {
         String authors = "Author";
         String genres = "Genre";
 
-        assertThrows(ItemNotFoundException.class, () -> bookService.saveBook("Test2", authors, genres));
+        assertThrows(ItemNotFoundException.class, () -> bookService.addBook("Test2", authors, genres));
     }
 
     @Test

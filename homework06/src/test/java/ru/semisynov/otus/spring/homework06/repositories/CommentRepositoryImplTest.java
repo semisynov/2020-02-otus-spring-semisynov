@@ -68,7 +68,7 @@ class CommentRepositoryImplTest {
     void shouldInsertComment() {
         Book testBook = entityManager.find(Book.class, FIRST_BOOK_ID);
         Comment testComment = new Comment(0L, LocalDateTime.now(), EXPECTED_TEXT, testBook);
-        commentRepository.save(testComment);
+        commentRepository.add(testComment);
 
         assertThat(testComment.getId()).isGreaterThan(0);
 
@@ -81,19 +81,10 @@ class CommentRepositoryImplTest {
     void shouldDeleteAuthor() {
         Comment firstComment = entityManager.find(Comment.class, FIRST_ID);
         assertThat(firstComment).isNotNull();
-        entityManager.detach(firstComment);
 
-        commentRepository.deleteById(FIRST_ID);
+        commentRepository.delete(firstComment);
         Comment deletedComment = entityManager.find(Comment.class, FIRST_ID);
 
         assertThat(deletedComment).isNull();
-    }
-
-    @DisplayName("возвращает список всех комментариев по книге")
-    @Test
-    void shouldReturnExpectedBookCommentsList() {
-        List<Comment> comments = commentRepository.findAllByBook(2L);
-        assertThat(comments).isNotNull().hasSize(2)
-                .allMatch(a -> !a.getText().equals(""));
     }
 }

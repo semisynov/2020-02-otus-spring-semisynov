@@ -8,7 +8,7 @@ public interface BookService {
 
     String findAllBooks();
 
-    String saveBook(String title, String authors, String genres);
+    String addBook(String title, String authors, String genres);
 
     String deleteBookById(long id);
 }

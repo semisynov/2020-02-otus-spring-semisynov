@@ -7,14 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.semisynov.otus.spring.homework06.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework06.model.Genre;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Repository для работы с жанрами книг ")
 @DataJpaTest
@@ -79,18 +77,11 @@ class GenreRepositoryImplTest {
     void shouldDeleteGenre() {
         Genre firstGenre = entityManager.find(Genre.class, FIRST_ID);
         assertThat(firstGenre).isNotNull();
-        entityManager.detach(firstGenre);
 
-        genreRepository.deleteById(FIRST_ID);
+        genreRepository.delete(firstGenre);
         Genre deletedGenre = entityManager.find(Genre.class, FIRST_ID);
 
         assertThat(deletedGenre).isNull();
-    }
-
-    @DisplayName("не удаляет автора из БД есть связь")
-    @Test
-    void shouldNotDeleteGenre() {
-        assertThrows(DataReferenceException.class, () -> genreRepository.deleteById(2L));
     }
 
     @DisplayName("возвращает заданного жанр по его названию")

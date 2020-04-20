@@ -7,14 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.semisynov.otus.spring.homework06.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework06.model.Author;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Repository для работы с авторами книг ")
 @DataJpaTest
@@ -79,18 +77,11 @@ class AuthorRepositoryImplTest {
     void shouldDeleteAuthor() {
         Author firstAuthor = entityManager.find(Author.class, FIRST_ID);
         assertThat(firstAuthor).isNotNull();
-        entityManager.detach(firstAuthor);
 
-        authorRepository.deleteById(FIRST_ID);
+        authorRepository.delete(firstAuthor);
         Author deletedAuthor = entityManager.find(Author.class, FIRST_ID);
 
         assertThat(deletedAuthor).isNull();
-    }
-
-    @DisplayName("не удаляет автора из БД есть связь")
-    @Test
-    void shouldNotDeleteAuthor() {
-        assertThrows(DataReferenceException.class, () -> authorRepository.deleteById(2L));
     }
 
     @DisplayName("возвращает заданного автора по его имени")

@@ -68,7 +68,7 @@ class BookRepositoryImplTest {
         List<Author> authors = Collections.emptyList();
         List<Genre> genres = Collections.emptyList();
 
-        Book testBook = new Book(0L, "TestBook", authors, genres);
+        Book testBook = new Book(0L, "TestBook", authors, genres, Collections.emptyList());
         bookRepository.save(testBook);
 
         assertThat(testBook.getId()).isGreaterThan(0);
@@ -82,9 +82,8 @@ class BookRepositoryImplTest {
     void shouldDeleteBook() {
         Book firstBook = entityManager.find(Book.class, FIRST_ID);
         assertThat(firstBook).isNotNull();
-        entityManager.detach(firstBook);
 
-        bookRepository.deleteById(FIRST_ID);
+        bookRepository.delete(firstBook);
         Book deletedBook = entityManager.find(Book.class, FIRST_ID);
 
         assertThat(deletedBook).isNull();

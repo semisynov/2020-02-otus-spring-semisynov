@@ -5,7 +5,6 @@ import ru.semisynov.otus.spring.homework06.model.Book;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
@@ -14,23 +13,23 @@ import java.util.Optional;
 public class BookRepositoryImpl implements BookRepository {
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     @Override
     public long count() {
-        TypedQuery<Long> query = em.createQuery("select count(b) " +
+        TypedQuery<Long> query = entityManager.createQuery("select count(b) " +
                 "from Book b ", Long.class);
         return query.getSingleResult();
     }
 
     @Override
     public Optional<Book> findById(long id) {
-        return Optional.ofNullable(em.find(Book.class, id));
+        return Optional.ofNullable(entityManager.find(Book.class, id));
     }
 
     @Override
     public List<Book> findAll() {
-        TypedQuery<Book> typedQuery = em.createQuery("select b " +
+        TypedQuery<Book> typedQuery = entityManager.createQuery("select b " +
                 "from Book b ", Book.class);
         return typedQuery.getResultList();
     }
@@ -38,17 +37,15 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Book save(Book book) {
         if (book.getId() == 0) {
-            em.persist(book);
+            entityManager.persist(book);
             return book;
         } else {
-            return em.merge(book);
+            return entityManager.merge(book);
         }
     }
 
     @Override
-    public void deleteById(long id) {
-        Query query = em.createQuery("delete from Book where id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+    public void delete(Book book) {
+        entityManager.remove(book);
     }
 }

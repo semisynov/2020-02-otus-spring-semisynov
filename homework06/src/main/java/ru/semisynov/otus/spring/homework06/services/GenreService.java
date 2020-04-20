@@ -8,7 +8,7 @@ public interface GenreService {
 
     String getAllGenres();
 
-    String createGenre(String title);
+    String addGenre(String title);
 
     String deleteGenreById(long id);
 }

@@ -8,7 +8,7 @@ public interface AuthorService {
 
     String findAllAuthors();
 
-    String saveAuthor(String name);
+    String addAuthor(String name);
 
     String deleteAuthorById(long id);
 }

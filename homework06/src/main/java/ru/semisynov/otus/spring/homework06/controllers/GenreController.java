@@ -38,7 +38,7 @@ public class GenreController {
 
     @ShellMethod(value = "Create new genre", key = {"gc", "genreCreate"})
     public String createGenre(@ShellOption(help = "Genre title") String title) {
-        return genreService.createGenre(title);
+        return genreService.addGenre(title);
     }
 
     @ShellMethod(value = "Delete genre", key = {"gd", "genreDelete"})

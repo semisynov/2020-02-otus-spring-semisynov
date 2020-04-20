@@ -41,7 +41,7 @@ public class CommentController {
     public String createComment(@ShellOption(help = "Comment text") String text, @ShellOption(help = "Book id") String bookId) {
         String result;
         try {
-            result = commentService.saveComment(text, Long.parseLong(bookId));
+            result = commentService.addComment(text, Long.parseLong(bookId));
         } catch (NumberFormatException e) {
             throw new BadParameterException(BAD_BOOK_ID_PARAMETER);
         }

@@ -13,13 +13,13 @@ import ru.semisynov.otus.spring.homework06.repositories.BookRepository;
 import ru.semisynov.otus.spring.homework06.repositories.GenreRepository;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service("bookService")
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
@@ -41,12 +41,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public String findBookById(long id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
         return book.toString();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public String findAllBooks() {
         List<Book> books = bookRepository.findAll();
 
@@ -61,11 +63,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public String saveBook(String title, String authors, String genres) {
+    public String addBook(String title, String authors, String genres) {
         List<Author> bookAuthors = parseBookAuthors(authors);
         List<Genre> bookGenres = parseBookGenres(genres);
 
-        Book book = bookRepository.save(new Book(0L, title, bookAuthors, bookGenres));
+        Book book = bookRepository.save(new Book(0L, title, bookAuthors, bookGenres, Collections.emptyList()));
         return String.format(TEXT_NEW, book.getId(), book.getTitle());
     }
 
@@ -73,7 +75,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public String deleteBookById(long id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
-        bookRepository.deleteById(book.getId());
+        bookRepository.delete(book);
         return String.format(TEXT_DELETED, book.getId(), book.getTitle());
     }
 

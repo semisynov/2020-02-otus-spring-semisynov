@@ -8,7 +8,7 @@ public interface CommentService {
 
     String getAllComments();
 
-    String saveComment(String text, long bookId);
+    String addComment(String text, long bookId);
 
     String deleteCommentById(long id);
 
