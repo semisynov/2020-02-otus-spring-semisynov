@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: development
+  data:
+    mongodb:
+      authentication-database: none
+      #uri: mongodb://localhost:27017/library
+      host: localhost
+      port: 27017
+      database: library
+---
+spring:
+  profiles: development
+logging:
+  level:
+    root: INFO
+---
+spring:
+  profiles: production
+logging:
+  level:
+    root: ERROR
