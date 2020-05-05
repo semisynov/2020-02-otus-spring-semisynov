@@ -1,17 +1,12 @@
 package ru.semisynov.otus.spring.homework08.services;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.shell.jline.InteractiveShellApplicationRunner;
-import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import ru.semisynov.otus.spring.homework08.dto.BookEntry;
-import ru.semisynov.otus.spring.homework08.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework08.model.Author;
 import ru.semisynov.otus.spring.homework08.model.Book;
 import ru.semisynov.otus.spring.homework08.model.Genre;
@@ -20,14 +15,15 @@ import ru.semisynov.otus.spring.homework08.repositories.BookRepository;
 import ru.semisynov.otus.spring.homework08.repositories.CommentRepository;
 import ru.semisynov.otus.spring.homework08.repositories.GenreRepository;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.shell.jline.InteractiveShellApplicationRunner;
+import org.springframework.shell.jline.ScriptShellApplicationRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(properties = {

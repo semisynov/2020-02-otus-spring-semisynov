@@ -1,12 +1,13 @@
 package ru.semisynov.otus.spring.homework08.repositories;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import java.util.List;
+import java.util.Optional;
+
 import ru.semisynov.otus.spring.homework08.dto.CommentEntry;
 import ru.semisynov.otus.spring.homework08.model.Comment;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 public interface CommentRepository extends MongoRepository<Comment, String> {
 

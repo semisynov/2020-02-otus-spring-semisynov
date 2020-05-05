@@ -1,9 +1,10 @@
 package ru.semisynov.otus.spring.homework08.repositories;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.Optional;
+
 import ru.semisynov.otus.spring.homework08.model.Author;
 
-import java.util.Optional;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface AuthorRepository extends MongoRepository<Author, String> {
 

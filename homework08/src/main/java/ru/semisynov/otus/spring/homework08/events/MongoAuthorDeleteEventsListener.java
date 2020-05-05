@@ -1,10 +1,9 @@
 package ru.semisynov.otus.spring.homework08.events;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
-import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
-import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
-import org.springframework.stereotype.Component;
 import ru.semisynov.otus.spring.homework08.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework08.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework08.model.Author;
@@ -12,7 +11,9 @@ import ru.semisynov.otus.spring.homework08.model.Book;
 import ru.semisynov.otus.spring.homework08.repositories.AuthorRepository;
 import ru.semisynov.otus.spring.homework08.repositories.BookRepository;
 
-import java.util.List;
+import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
+import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

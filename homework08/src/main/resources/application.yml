@@ -3,8 +3,6 @@ spring:
     active: development
   data:
     mongodb:
-      authentication-database: none
-      #uri: mongodb://localhost:27017/library
       host: localhost
       port: 27017
       database: library

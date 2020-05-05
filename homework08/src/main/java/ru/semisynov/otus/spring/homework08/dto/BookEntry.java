@@ -6,6 +6,8 @@ public interface BookEntry {
 
     String getId();
 
+    String getTitle();
+
     @Value("#{T(ru.semisynov.otus.spring.homework08.utils.ResultPrinter).printFullBookInfo(target)}")
     String getFullBookInfo();
 }

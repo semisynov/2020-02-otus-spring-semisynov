@@ -6,6 +6,8 @@ public interface CommentEntry {
 
     String getId();
 
+    String getText();
+
     @Value("#{T(ru.semisynov.otus.spring.homework08.utils.ResultPrinter).printBookComment(target)}")
     String getFullCommentInfo();
 }

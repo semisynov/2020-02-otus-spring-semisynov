@@ -1,9 +1,5 @@
 spring:
   data:
     mongodb:
-#      authentication-database: none
       port: 0
-#      database: test
-      #  mongodb:
-      #    embedded:
-      #      version: 3.5.4
+      database: test_library

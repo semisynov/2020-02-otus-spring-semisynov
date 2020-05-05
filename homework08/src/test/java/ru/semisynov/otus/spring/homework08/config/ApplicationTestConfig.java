@@ -8,8 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ApplicationConfig {
-    private static final String CHANGELOG_PACKAGE = "ru.semisynov.otus.spring.homework08.changelogs";
+public class ApplicationTestConfig {
+
+    private static final String CHANGELOG_PACKAGE = "ru.semisynov.otus.spring.homework08.changelogs.test";
 
     @Bean
     public Mongock mongock(MongoConfig mongoConfig, MongoClient mongoClient) {

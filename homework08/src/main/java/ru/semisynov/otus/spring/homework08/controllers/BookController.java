@@ -1,11 +1,11 @@
 package ru.semisynov.otus.spring.homework08.controllers;
 
 import lombok.RequiredArgsConstructor;
+import ru.semisynov.otus.spring.homework08.services.BookService;
+
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.semisynov.otus.spring.homework08.errors.BadParameterException;
-import ru.semisynov.otus.spring.homework08.services.BookService;
 
 @ShellComponent("bookController")
 @RequiredArgsConstructor

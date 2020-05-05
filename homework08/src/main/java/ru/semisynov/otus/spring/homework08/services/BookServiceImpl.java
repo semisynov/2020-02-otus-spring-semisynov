@@ -1,9 +1,11 @@
 package ru.semisynov.otus.spring.homework08.services;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.semisynov.otus.spring.homework08.dto.BookEntry;
 import ru.semisynov.otus.spring.homework08.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework08.model.Author;
@@ -14,10 +16,8 @@ import ru.semisynov.otus.spring.homework08.repositories.BookRepository;
 import ru.semisynov.otus.spring.homework08.repositories.CommentRepository;
 import ru.semisynov.otus.spring.homework08.repositories.GenreRepository;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service("bookService")

@@ -1,4 +1,4 @@
-package ru.semisynov.otus.spring.homework08.changelogs;
+package ru.semisynov.otus.spring.homework08.changelogs.test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import ru.semisynov.otus.spring.homework08.model.Genre;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @ChangeLog(order = "001")
-public class InitMongoDBChangeLog {
+public class InitMongoDBTestChangeLog {
 
     private final List<Author> authors = new ArrayList<>();
     private final List<Genre> genres = new ArrayList<>();
@@ -28,7 +28,7 @@ public class InitMongoDBChangeLog {
     @ChangeSet(order = "001", id = "initAuthors", author = "Semisynov", runAlways = true)
     public void initAuthors(MongoTemplate template) {
         for (int i = 0; i < 10; i++) {
-            Author author = new Author("Автор" + i);
+            Author author = new Author("ТестАвтор" + i);
             template.save(author);
             authors.add(author);
         }
@@ -37,7 +37,7 @@ public class InitMongoDBChangeLog {
     @ChangeSet(order = "002", id = "initGenres", author = "Semisynov", runAlways = true)
     public void initGenres(MongoTemplate template) {
         for (int i = 0; i < 10; i++) {
-            Genre genre = new Genre("Жанр" + i);
+            Genre genre = new Genre("ТестЖанр" + i);
             template.save(genre);
             genres.add(genre);
         }
@@ -48,7 +48,7 @@ public class InitMongoDBChangeLog {
         for (int i = 0; i < 5; i++) {
             List<Author> bookAuthors = List.of(authors.get(i), authors.get(i + 1));
             List<Genre> bookGenres = List.of(genres.get(i), genres.get(i + 1));
-            Book book = new Book("Книга" + i, bookAuthors, bookGenres);
+            Book book = new Book("ТестКнига" + i, bookAuthors, bookGenres);
             template.save(book);
             books.add(book);
         }
@@ -57,7 +57,7 @@ public class InitMongoDBChangeLog {
     @ChangeSet(order = "004", id = "initComments", author = "Semisynov", runAlways = true)
     public void initComments(MongoTemplate template) {
         for (Book book : books) {
-            Comment comment = new Comment("Комментарий к " + book.getTitle(), book);
+            Comment comment = new Comment("ТестКоммент", book);
             template.save(comment);
         }
     }

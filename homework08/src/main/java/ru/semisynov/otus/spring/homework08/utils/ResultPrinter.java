@@ -1,12 +1,12 @@
 package ru.semisynov.otus.spring.homework08.utils;
 
-import ru.semisynov.otus.spring.homework08.model.Author;
-import ru.semisynov.otus.spring.homework08.model.Book;
-import ru.semisynov.otus.spring.homework08.model.Comment;
-
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import ru.semisynov.otus.spring.homework08.model.Author;
+import ru.semisynov.otus.spring.homework08.model.Book;
+import ru.semisynov.otus.spring.homework08.model.Comment;
 
 import static org.apache.commons.lang3.StringUtils.trim;
 
