@@ -115,7 +115,6 @@ class CommentRepositoryTest {
         assertThat(expectedComment).isNotNull().matches(c -> c.getText().equals(comment.getText()));
     }
 
-
     @DisplayName("удаляет комментарий из БД")
     @Test
     void shouldDeleteComment() {
@@ -126,7 +125,7 @@ class CommentRepositoryTest {
         assertThat(book).isNotNull();
 
         Query queryComment = new Query();
-        queryBook.addCriteria(Criteria.where("bookId").is(book.getId()));
+        queryComment.addCriteria(Criteria.where("bookId").is(book.getId()));
         Comment firstComment = mongoTemplate.findOne(queryComment, Comment.class);
 
         assertThat(firstComment).isNotNull();
@@ -152,5 +151,29 @@ class CommentRepositoryTest {
         List<CommentEntry> books = commentRepository.findAllByBook_Id(book.getId());
         assertThat(books).isNotNull().hasSize(1)
                 .allMatch(c -> !c.getText().equals(""));
+    }
+
+    @DisplayName("удаляет все комментарии по книге из БД")
+    @Test
+    void shouldDeleteBookComment() {
+        String bookTitle = "ТестКнига0";
+        Query queryBook = new Query();
+        queryBook.addCriteria(Criteria.where("title").is(bookTitle));
+        Book book = mongoTemplate.findOne(queryBook, Book.class);
+        assertThat(book).isNotNull();
+
+        Query queryComment = new Query();
+        queryComment.addCriteria(Criteria.where("bookId").is(book.getId()));
+        List<Comment> bookComments = mongoTemplate.find(queryComment, Comment.class);
+
+        assertThat(bookComments).isNotNull().hasSize(1);
+
+        commentRepository.deleteCommentsByBookId(book.getId());
+
+        Query queryDeletedComments = new Query();
+        queryDeletedComments.addCriteria(Criteria.where("bookId").is(book.getId()));
+        List<Comment> deletedBookComments = mongoTemplate.find(queryDeletedComments, Comment.class);
+
+        assertThat(deletedBookComments).isNotNull().hasSize(0);
     }
 }

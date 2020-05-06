@@ -13,7 +13,6 @@ import ru.semisynov.otus.spring.homework08.model.Book;
 import ru.semisynov.otus.spring.homework08.model.Genre;
 import ru.semisynov.otus.spring.homework08.repositories.AuthorRepository;
 import ru.semisynov.otus.spring.homework08.repositories.BookRepository;
-import ru.semisynov.otus.spring.homework08.repositories.CommentRepository;
 import ru.semisynov.otus.spring.homework08.repositories.GenreRepository;
 
 import org.springframework.stereotype.Service;
@@ -27,7 +26,6 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
-    private final CommentRepository commentRepository;
 
     private static final String TEXT_EMPTY = "There are no books in database";
     private static final String TEXT_NOT_FOUND = "Book not found";
@@ -47,6 +45,13 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     public String findBookById(String id) {
         BookEntry bookEntry = bookRepository.findBookById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
+        return bookEntry.getFullBookInfo();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String findBookByTitle(String title) {
+        BookEntry bookEntry = bookRepository.findBookByTitleIgnoreCase(title).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
         return bookEntry.getFullBookInfo();
     }
 
@@ -77,8 +82,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public String deleteBookById(String id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
-        bookRepository.delete(book);
-        commentRepository.deleteCommentsByBookId(id);
+        bookRepository.deleteBook(book);
         return String.format(TEXT_DELETED, book.getId(), book.getTitle());
     }
 

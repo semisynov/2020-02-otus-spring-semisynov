@@ -12,6 +12,7 @@ import ru.semisynov.otus.spring.homework08.dto.BookEntry;
 import ru.semisynov.otus.spring.homework08.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework08.model.Author;
 import ru.semisynov.otus.spring.homework08.model.Book;
+import ru.semisynov.otus.spring.homework08.model.Comment;
 import ru.semisynov.otus.spring.homework08.model.Genre;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,7 +137,7 @@ class BookRepositoryTest {
         });
     }
 
-    @DisplayName("удаляет книгу из БД")
+    @DisplayName("удаляет книгу из БД, комментарии остаются")
     @Test
     void shouldDeleteBook() {
         String bookTitle = BOOK_TITLE_PREFIX + "0";
@@ -154,6 +155,38 @@ class BookRepositoryTest {
         Book deletedBook = mongoTemplate.findOne(query, Book.class);
 
         assertThat(deletedBook).isNull();
+
+        Query queryComment = new Query();
+        queryComment.addCriteria(Criteria.where("bookId").is(bookId));
+        List<Comment> comments = mongoTemplate.find(queryComment, Comment.class);
+
+        assertThat(comments).isNotNull().hasSize(1);
+    }
+
+    @DisplayName("удаляет книгу из БД вместе с комментариями")
+    @Test
+    void shouldDeleteBookWithComments() {
+        String bookTitle = BOOK_TITLE_PREFIX + "0";
+
+        Optional<BookEntry> optionalBook = bookRepository.findBookByTitleIgnoreCase(bookTitle.toLowerCase());
+        String bookId = optionalBook.orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND)).getId();
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(bookId));
+        Book firstBook = mongoTemplate.findOne(query, Book.class);
+
+        assertThat(firstBook).isNotNull();
+
+        bookRepository.deleteBook(firstBook);
+        Book deletedBook = mongoTemplate.findOne(query, Book.class);
+
+        assertThat(deletedBook).isNull();
+
+        Query queryComment = new Query();
+        queryComment.addCriteria(Criteria.where("bookId").is(bookId));
+        List<Comment> comments = mongoTemplate.find(queryComment, Comment.class);
+
+        assertThat(comments).isNotNull().hasSize(0);
     }
 
     @DisplayName("возвращает список всех книг по автору")

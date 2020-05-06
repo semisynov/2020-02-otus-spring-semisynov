@@ -8,6 +8,6 @@ public interface CommentEntry {
 
     String getText();
 
-    @Value("#{T(ru.semisynov.otus.spring.homework08.utils.ResultPrinter).printBookComment(target)}")
+    @Value("#{T(ru.semisynov.otus.spring.homework08.utils.ResultPrinter).printBookComment(target.dateTime, target.book.title, target.text)}")
     String getFullCommentInfo();
 }

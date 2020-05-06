@@ -6,6 +6,8 @@ public interface BookService {
 
     String findBookById(String id);
 
+    String findBookByTitle(String title);
+
     String findAllBooks();
 
     String addBook(String title, String authors, String genres);

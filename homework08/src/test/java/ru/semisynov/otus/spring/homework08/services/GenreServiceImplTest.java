@@ -1,7 +1,12 @@
 package ru.semisynov.otus.spring.homework08.services;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.semisynov.otus.spring.homework08.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework08.model.Genre;
 import ru.semisynov.otus.spring.homework08.repositories.GenreRepository;
 
@@ -14,6 +19,8 @@ import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(properties = {
@@ -64,36 +71,36 @@ class GenreServiceImplTest {
         assertEquals(result, TEXT_EMPTY);
     }
 
-//    @Test
-//    @DisplayName("возвращает заданный жанр по его id")
-//    void shouldReturnExpectedGenreById() {
-//        when(genreRepository.findById(EXPECTED_ID)).thenReturn(Optional.of(EXPECTED_ENTITY));
-//        String result = genreService.getGenreById(EXPECTED_ID);
-//        assertEquals(result, TEXT_BY_ID);
-//    }
-//
-//    @Test
-//    @DisplayName("возвращает ошибку поиска жанра по его id")
-//    void shouldReturnItemNotFoundException() {
-//        assertThrows(ItemNotFoundException.class, () -> genreService.getGenreById(2L));
-//    }
-//
-//    @Test
-//    @DisplayName("создает новый жанр")
-//    void shouldCreateGenre() {
-//        Genre testGenre = new Genre(10L, EXPECTED_TITLE);
-//        when(genreRepository.save(any())).thenReturn(testGenre);
-//        String result = genreService.addGenre(EXPECTED_TITLE);
-//        assertEquals(result, String.format(TEXT_NEW, 10L, EXPECTED_TITLE));
-//    }
-//
-//    @Test
-//    @DisplayName("возвращает все жанры")
-//    void shouldReturnAllGenres() {
-//        List<Genre> genres = List.of(new Genre(0L, "Test1"), new Genre(0L, "Test2"), new Genre(0L, "Test3"));
-//        when(genreRepository.findAll()).thenReturn(genres);
-//
-//        String result = genreService.getAllGenres();
-//        assertEquals(result, genres.stream().map(Genre::toString).collect(Collectors.joining("\n")));
-//    }
+    @Test
+    @DisplayName("возвращает заданный жанр по его id")
+    void shouldReturnExpectedGenreById() {
+        when(genreRepository.findById(EXPECTED_ID)).thenReturn(Optional.of(EXPECTED_ENTITY));
+        String result = genreService.getGenreById(EXPECTED_ID);
+        assertEquals(result, TEXT_BY_ID);
+    }
+
+    @Test
+    @DisplayName("возвращает ошибку поиска жанра по его id")
+    void shouldReturnItemNotFoundException() {
+        assertThrows(ItemNotFoundException.class, () -> genreService.getGenreById("10000"));
+    }
+
+    @Test
+    @DisplayName("создает новый жанр")
+    void shouldCreateGenre() {
+        Genre testGenre = new Genre("100", EXPECTED_TITLE);
+        when(genreRepository.save(any())).thenReturn(testGenre);
+        String result = genreService.addGenre(EXPECTED_TITLE);
+        assertEquals(result, String.format(TEXT_NEW, "100", EXPECTED_TITLE));
+    }
+
+    @Test
+    @DisplayName("возвращает все жанры")
+    void shouldReturnAllGenres() {
+        List<Genre> genres = List.of(new Genre("1", "Test1"), new Genre("2", "Test2"), new Genre("3", "Test3"));
+        when(genreRepository.findAll()).thenReturn(genres);
+
+        String result = genreService.getAllGenres();
+        assertEquals(result, genres.stream().map(Genre::toString).collect(Collectors.joining("\n")));
+    }
 }

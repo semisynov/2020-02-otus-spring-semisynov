@@ -25,6 +25,11 @@ public class BookController {
         return bookService.findBookById(id);
     }
 
+    @ShellMethod(value = "Get book by title", key = {"bct", "title"})
+    public String getBookByTitle(@ShellOption(help = "Book title") String title) {
+        return bookService.findBookByTitle(title);
+    }
+
     @ShellMethod(value = "Get all books", key = {"b", "books"})
     public String getBooksList() {
         return bookService.findAllBooks();

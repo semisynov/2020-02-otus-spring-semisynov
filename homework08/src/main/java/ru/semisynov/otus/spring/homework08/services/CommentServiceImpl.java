@@ -29,6 +29,7 @@ public class CommentServiceImpl implements CommentService {
     private static final String TEXT_COUNT = "Comments in the database: %s";
     private static final String TEXT_NEW = "New comment text: %s, book: %s";
     private static final String TEXT_DELETED = "Successfully deleted comment id: %s, book: %s";
+    private static final String TEXT_BOOK_DELETED = "Successfully deleted comment by book id: %s, book: %s";
 
     @Override
     public String getCommentsCount() {
@@ -83,5 +84,13 @@ public class CommentServiceImpl implements CommentService {
             commentsResult = comments.stream().map(CommentEntry::getFullCommentInfo).collect(Collectors.joining("\n"));
         }
         return commentsResult;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String deleteCommentsByBookId(String bookId) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
+        commentRepository.deleteCommentsByBookId(book.getId());
+        return String.format(TEXT_BOOK_DELETED, book.getId(), book.getTitle());
     }
 }

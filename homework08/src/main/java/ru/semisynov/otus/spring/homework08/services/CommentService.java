@@ -13,4 +13,6 @@ public interface CommentService {
     String deleteCommentById(String id);
 
     String getAllBookComments(String bookId);
+
+    String deleteCommentsByBookId(String bookId);
 }

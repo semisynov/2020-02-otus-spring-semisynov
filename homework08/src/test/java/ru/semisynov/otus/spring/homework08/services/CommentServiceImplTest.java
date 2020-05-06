@@ -3,11 +3,14 @@ package ru.semisynov.otus.spring.homework08.services;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.semisynov.otus.spring.homework08.dto.CommentEntry;
+import ru.semisynov.otus.spring.homework08.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework08.model.Author;
 import ru.semisynov.otus.spring.homework08.model.Book;
 import ru.semisynov.otus.spring.homework08.model.Comment;
@@ -23,9 +26,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-
 
 @SpringBootTest(properties = {
         InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
@@ -62,22 +67,22 @@ class CommentServiceImplTest {
         Book book = new Book(EXPECTED_BOOK_ID, "Test", authors, genres, Collections.emptyList());
         EXPECTED_ENTITY = new Comment(EXPECTED_ID, LocalDateTime.now(), EXPECTED_TEXT, book);
 
-//        EXPECTED_ENTRY = new CommentEntry() {
-//            @Override
-//            public long getId() {
-//                return 1L;
-//            }
-//
-//            @Override
-//            public String getText() {
-//                return EXPECTED_TEXT;
-//            }
-//
-//            @Override
-//            public String getFullCommentInfo() {
-//                return "Test";
-//            }
-//        };
+        EXPECTED_ENTRY = new CommentEntry() {
+            @Override
+            public String getId() {
+                return "1";
+            }
+
+            @Override
+            public String getText() {
+                return EXPECTED_TEXT;
+            }
+
+            @Override
+            public String getFullCommentInfo() {
+                return "Test";
+            }
+        };
     }
 
     @MockBean
@@ -104,38 +109,38 @@ class CommentServiceImplTest {
         String result = commentService.getCommentsCount();
         assertEquals(result, TEXT_EMPTY);
     }
-//
-//    @Test
-//    @DisplayName("возвращает заданный комментарий по его id")
-//    void shouldReturnExpectedCommentById() {
-//        when(commentRepository.findCommentById(EXPECTED_ID)).thenReturn(Optional.of(EXPECTED_ENTRY));
-//
-//        String result = commentService.getCommentById(EXPECTED_ID);
-//        assertThat(result).isNotBlank();
-//    }
-//
-//    @Test
-//    @DisplayName("возвращает ошибку поиска комментария по его id")
-//    void shouldReturnItemNotFoundException() {
-//        assertThrows(ItemNotFoundException.class, () -> commentService.getCommentById(10L));
-//    }
-//
-//    @Test
-//    @DisplayName("создает новый комментарий")
-//    void shouldCreateComment() {
-//        when(bookRepository.findById(anyLong())).thenReturn(Optional.of(EXPECTED_ENTITY.getBook()));
-//
-//        String result = commentService.addComment(EXPECTED_TEXT, EXPECTED_BOOK_ID);
-//        assertThat(result).isNotBlank();
-//    }
-//
-//    @Test
-//    @DisplayName("возвращает все комментарии")
-//    void shouldReturnAllComments() {
-//        List<CommentEntry> comments = List.of(EXPECTED_ENTRY);
-//        when(commentRepository.findAllComments()).thenReturn(comments);
-//
-//        String result = commentService.getAllComments();
-//        assertEquals(result, comments.stream().map(CommentEntry::getText).collect(Collectors.joining("\n")));
-//    }
+
+    @Test
+    @DisplayName("возвращает заданный комментарий по его id")
+    void shouldReturnExpectedCommentById() {
+        when(commentRepository.findCommentById(EXPECTED_ID)).thenReturn(Optional.of(EXPECTED_ENTRY));
+
+        String result = commentService.getCommentById(EXPECTED_ID);
+        assertThat(result).isNotBlank();
+    }
+
+    @Test
+    @DisplayName("возвращает ошибку поиска комментария по его id")
+    void shouldReturnItemNotFoundException() {
+        assertThrows(ItemNotFoundException.class, () -> commentService.getCommentById("10000"));
+    }
+
+    @Test
+    @DisplayName("создает новый комментарий")
+    void shouldCreateComment() {
+        when(bookRepository.findById(anyString())).thenReturn(Optional.of(EXPECTED_ENTITY.getBook()));
+
+        String result = commentService.addComment(EXPECTED_TEXT, EXPECTED_BOOK_ID);
+        assertThat(result).isNotBlank();
+    }
+
+    @Test
+    @DisplayName("возвращает все комментарии")
+    void shouldReturnAllComments() {
+        List<CommentEntry> comments = List.of(EXPECTED_ENTRY);
+        when(commentRepository.findAllComments()).thenReturn(comments);
+
+        String result = commentService.getAllComments();
+        assertEquals(result, comments.stream().map(CommentEntry::getText).collect(Collectors.joining("\n")));
+    }
 }

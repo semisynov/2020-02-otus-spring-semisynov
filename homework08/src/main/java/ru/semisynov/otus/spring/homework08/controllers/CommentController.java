@@ -16,7 +16,7 @@ public class CommentController {
     private static final String BAD_ID_PARAMETER = "Comment id can only be a number";
     private static final String BAD_BOOK_ID_PARAMETER = "Book id can only be a number";
 
-    @ShellMethod(value = "Genres count", key = {"cco", "commentsCount"})
+    @ShellMethod(value = "Comments count", key = {"cco", "commentsCount"})
     public String getGenresCount() {
         return commentService.getCommentsCount();
     }
@@ -39,6 +39,11 @@ public class CommentController {
     @ShellMethod(value = "Delete comment", key = {"cd", "commentDelete"})
     public String deleteComment(@ShellOption(help = "Comment id") String id) {
         return commentService.deleteCommentById(id);
+    }
+
+    @ShellMethod(value = "Delete comment by bookId", key = {"cdb", "commentByBookDelete"})
+    public String deleteBookComment(@ShellOption(help = "Book id") String bookId) {
+        return commentService.deleteCommentsByBookId(bookId);
     }
 
     @ShellMethod(value = "Get all book comments", key = {"cb", "commentsBook"})
