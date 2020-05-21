@@ -16,6 +16,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<CommentEntry> findAllComments();
 
     List<CommentEntry> findAllByBook_Id(long bookId);
-
-    void deleteCommentsByBookId(String bookId);
 }

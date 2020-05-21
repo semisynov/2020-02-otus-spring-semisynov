@@ -3,6 +3,7 @@ package ru.semisynov.otus.spring.homework09.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -39,8 +40,8 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
 
-    @OneToMany(targetEntity = Comment.class, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)//, orphanRemoval = true)
+    @ToString.Exclude
     private List<Comment> comments;
 
     public Book(String title, List<Author> authors, List<Genre> genres) {

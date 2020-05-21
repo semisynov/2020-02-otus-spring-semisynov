@@ -1,16 +1,8 @@
 package ru.semisynov.otus.spring.homework09.services;
 
+import ru.semisynov.otus.spring.homework09.model.Comment;
+
 public interface CommentService {
 
-    String getCommentsCount();
-
-    String getCommentById(long id);
-
-    String getAllComments();
-
-    String addComment(String text, long bookId);
-
-    String deleteCommentById(long id);
-
-    String getAllBookComments(long bookId);
+    Comment addComment(Comment comment, long bookId);
 }

@@ -16,18 +16,30 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbar">
-        <a class="navbar-brand" href="#" th:href="@{/}">Библиотека</a>
+        <a class="navbar-brand" href="#" th:href="@{/}" th:text="#{menu.main}">Библиотека</a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-                <a class="nav-link" href="#" th:href="@{/book}">Книги</a>
+                <a class="nav-link" href="#" th:href="@{/book}" th:text="#{menu.book}">Книги</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" th:href="@{/author}">Авторы</a>
+                <a class="nav-link" href="#" th:href="@{/author}" th:text="#{menu.author}">Авторы</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" th:href="@{/genre}">Жанры</a>
+                <a class="nav-link" href="#" th:href="@{/genre}" th:text="#{menu.genre}">Жанры</a>
             </li>
         </ul>
+    </div>
+    <div>
+        <a href="?lang=ru" class="badge badge-secondary">
+            <span>
+                <img th:src="@{img/russia-flag.png}"/>
+            </span>
+        </a>
+        <a href="?lang=en" class="badge badge-secondary">
+            <span>
+                <img th:src="@{img/united-kingdom.png}"/>
+            </span>
+        </a>
     </div>
 </nav>
 </body>

@@ -1,65 +1,33 @@
 package ru.semisynov.otus.spring.homework09.controllers;
 
-//@ShellComponent("commentController")
-//@RequiredArgsConstructor
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ru.semisynov.otus.spring.homework09.model.Comment;
+import ru.semisynov.otus.spring.homework09.services.CommentService;
+
+@Slf4j
+@Controller("commentController")
+@RequiredArgsConstructor
 public class CommentController {
 
-//    private final CommentService commentService;
-//
-//    private static final String BAD_ID_PARAMETER = "Comment id can only be a number";
-//    private static final String BAD_BOOK_ID_PARAMETER = "Book id can only be a number";
-//
-//    @ShellMethod(value = "Genres count", key = {"cco", "commentsCount"})
-//    public String getGenresCount() {
-//        return commentService.getCommentsCount();
-//    }
-//
-//    @ShellMethod(value = "Get comment by id", key = {"cci", "commentId"})
-//    public String getCommentById(@ShellOption(help = "Comment id") String id) {
-//        String result;
-//        try {
-//            result = commentService.getCommentById(Long.parseLong(id));
-//        } catch (NumberFormatException e) {
-//            throw new BadParameterException(BAD_ID_PARAMETER);
-//        }
-//        return result;
-//    }
-//
-//    @ShellMethod(value = "Get all comments", key = {"c", "comments"})
-//    public String getCommentsList() {
-//        return commentService.getAllComments();
-//    }
-//
-//    @ShellMethod(value = "Create new comment", key = {"cc", "commentCreate"})
-//    public String createComment(@ShellOption(help = "Comment text") String text, @ShellOption(help = "Book id") String bookId) {
-//        String result;
-//        try {
-//            result = commentService.addComment(text, Long.parseLong(bookId));
-//        } catch (NumberFormatException e) {
-//            throw new BadParameterException(BAD_BOOK_ID_PARAMETER);
-//        }
-//        return result;
-//    }
-//
-//    @ShellMethod(value = "Delete comment", key = {"cd", "commentDelete"})
-//    public String deleteComment(@ShellOption(help = "Comment id") String id) {
-//        String result;
-//        try {
-//            result = commentService.deleteCommentById(Long.parseLong(id));
-//        } catch (NumberFormatException e) {
-//            throw new BadParameterException(BAD_ID_PARAMETER);
-//        }
-//        return result;
-//    }
-//
-//    @ShellMethod(value = "Get all book comments", key = {"cb", "commentsBook"})
-//    public String getBookCommentsList(@ShellOption(help = "Book id") String bookId) {
-//        String result;
-//        try {
-//            result = commentService.getAllBookComments(Long.parseLong(bookId));
-//        } catch (NumberFormatException e) {
-//            throw new BadParameterException(BAD_BOOK_ID_PARAMETER);
-//        }
-//        return result;
-//    }
+    private final CommentService commentService;
+
+    @GetMapping("/comment/add")
+    public String editView(@RequestParam("bookId") long bookId, Model model) {
+        model.addAttribute("bookId", bookId);
+        model.addAttribute("comment", new Comment());
+        return "comment/edit";
+    }
+
+    @PostMapping("/comment/add")
+    public String postBook(@RequestParam("bookId") long bookId, @ModelAttribute Comment comment) {
+        commentService.addComment(comment, bookId);
+        return "redirect:/book";
+    }
 }

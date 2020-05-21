@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: head-menu">
-    <title>Жанры</title>
+    <title th:text="#{genre.edit.header}">Жанр</title>
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
@@ -12,7 +12,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="col-lg-12 text-lg-center">
-                        <h2>Жанр</h2>
+                        <h2 th:text="#{genre.edit.header}">Жанр</h2>
                     </div>
                 </div>
                 <div class="card-body">
@@ -22,7 +22,8 @@
                               action="edit.html">
                             <th:block th:if="${genre.id != 0}">
                                 <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label form-control-label">ID:</label>
+                                    <label class="col-lg-3 col-form-label form-control-label"
+                                           th:text="#{genre.edit.id}">ID:</label>
                                     <div class="col-lg-9">
                                         <input class="form-control" id="id-input" type="text" readonly="readonly"
                                                th:field="*{id}" value="1"/>
@@ -30,7 +31,7 @@
                                 </div>
                             </th:block>
                             <div class="form-group row">
-                                <label class="col-lg-3 col-form-label form-control-label">Наименование:</label>
+                                <label class="col-lg-3 col-form-label form-control-label" th:text="#{genre.edit.title}">Наименование:</label>
                                 <div class="col-lg-9">
                                     <input class="form-control" id="name-input" type="text" th:field="*{title}"
                                            value="Genre Title"/>
@@ -39,10 +40,12 @@
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label"></label>
                                 <div class="col-lg-9">
-                                    <a href="list.html" th:href="@{/genre}">
-                                        <input type="button" class="btn btn-secondary" value="Отмена"/>
+                                    <a href="list.html" th:href="@{/genre}" class="btn btn-secondary">
+                                        <span th:text="#{button.cancel}">
+                                            Отмена
+                                        </span>
                                     </a>
-                                    <input type="submit" class="btn btn-primary" value="Сохранить"/>
+                                    <input type="submit" class="btn btn-primary" th:value="#{button.save}"/>
                                 </div>
                             </div>
                         </form>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: head-menu">
-    <title>Главная страница</title>
+    <title>Ошибка</title>
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
@@ -12,8 +12,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="col-lg-12 text-lg-center">
-                        <h2 th:text="#{message.hello}"></h2>
+                        <h2 th:text="#{exception.error}">Ошибка</h2>
                     </div>
+                </div>
+                <div class="card-body" th:text="#{exception.reference}">
+                    Невозможно удалить объект, в БД есть связи.
                 </div>
             </div>
         </div>
@@ -21,3 +24,4 @@
 </div>
 </body>
 </html>
+
