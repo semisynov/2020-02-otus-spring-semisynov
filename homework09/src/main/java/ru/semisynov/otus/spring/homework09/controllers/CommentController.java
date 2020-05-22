@@ -19,14 +19,14 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/comment/add")
-    public String editView(@RequestParam("bookId") long bookId, Model model) {
+    public String addView(@RequestParam("bookId") long bookId, Model model) {
         model.addAttribute("bookId", bookId);
         model.addAttribute("comment", new Comment());
         return "comment/edit";
     }
 
     @PostMapping("/comment/add")
-    public String postBook(@RequestParam("bookId") long bookId, @ModelAttribute Comment comment) {
+    public String postComment(@RequestParam("bookId") long bookId, @ModelAttribute Comment comment) {
         commentService.addComment(comment, bookId);
         return "redirect:/book";
     }

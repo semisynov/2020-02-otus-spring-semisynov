@@ -7,13 +7,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.semisynov.otus.spring.homework09.errors.DataReferenceException;
 import ru.semisynov.otus.spring.homework09.errors.ItemNotFoundException;
 import ru.semisynov.otus.spring.homework09.model.Author;
+import ru.semisynov.otus.spring.homework09.model.Book;
+import ru.semisynov.otus.spring.homework09.model.Genre;
 import ru.semisynov.otus.spring.homework09.repositories.AuthorRepository;
 import ru.semisynov.otus.spring.homework09.repositories.BookRepository;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @DisplayName("Класс AuthorServiceImplTest ")
@@ -28,21 +39,15 @@ class AuthorServiceImplTest {
         }
     }
 
-    private static final long EXPECTED_COUNT = 1L;
     private static final long EXPECTED_ID = 1L;
     private static final String EXPECTED_NAME = "Test";
     private static final Author EXPECTED_ENTITY = new Author(EXPECTED_ID, EXPECTED_NAME);
-
-    private static final String TEXT_EMPTY = "There are no authors in database";
-    private static final String TEXT_COUNT = String.format("Authors in the database: %s", EXPECTED_COUNT);
-    private static final String TEXT_BY_ID = String.format("Author(id=%s, name=%s)", EXPECTED_ID, EXPECTED_NAME);
-    private static final String TEXT_NEW = "New author id: %s, name: %s";
 
     @MockBean
     private AuthorRepository authorRepository;
 
     @MockBean
-    private AuthorRepository bookRepository;
+    private BookRepository bookRepository;
 
     @Autowired
     private AuthorService authorService;
@@ -50,9 +55,10 @@ class AuthorServiceImplTest {
     @Test
     @DisplayName("возвращает заданного автора по его id")
     void shouldReturnExpectedAuthorById() {
-//        when(authorRepository.findById(EXPECTED_ID)).thenReturn(Optional.of(EXPECTED_ENTITY));
-//        String result = authorService.findAuthorById(EXPECTED_ID);
-//        assertEquals(result, TEXT_BY_ID);
+        when(authorRepository.findById(EXPECTED_ID)).thenReturn(Optional.of(EXPECTED_ENTITY));
+        Author result = authorService.findAuthorById(EXPECTED_ID);
+
+        assertThat(result).isEqualToComparingFieldByField(EXPECTED_ENTITY);
     }
 
     @Test
@@ -62,21 +68,49 @@ class AuthorServiceImplTest {
     }
 
     @Test
-    @DisplayName("создает нового автора")
-    void shouldCreateAuthor() {
-//        Author testAuthor = new Author(10L, EXPECTED_NAME);
-//        when(authorRepository.save(any())).thenReturn(testAuthor);
-//        String result = authorService.addAuthor(EXPECTED_NAME);
-//        assertEquals(result, String.format(TEXT_NEW, 10L, EXPECTED_NAME));
+    @DisplayName("сохраняет автора в БД")
+    void shouldSaveAuthor() {
+        Author testAuthor = new Author(EXPECTED_NAME);
+        when(authorRepository.save(any())).thenReturn(testAuthor);
+        Author result = authorService.saveAuthor(testAuthor);
+
+        assertThat(result).isEqualToComparingFieldByField(testAuthor);
     }
 
     @Test
     @DisplayName("возвращает всех авторов")
     void shouldReturnAllAuthors() {
-//        List<Author> authors = List.of(new Author(0L, "Test1"), new Author(0L, "Test2"), new Author(0L, "Test3"));
-//        when(authorRepository.findAll()).thenReturn(authors);
-//
-//        String result = authorService.findAllAuthors();
-//        assertEquals(result, authors.stream().map(Author::toString).collect(Collectors.joining("\n")));
+        List<Author> authors = List.of(new Author("Test1"), new Author("Test2"), new Author("Test3"));
+        when(authorRepository.findAll()).thenReturn(authors);
+
+        List<Author> result = authorService.findAllAuthors();
+
+        assertThat(result).isNotNull().hasSize(authors.size())
+                .allMatch(a -> !a.getName().equals(""));
+    }
+
+    @Test
+    @DisplayName("удаляет автора из БД")
+    void shouldDeleteAuthor() {
+        Author testAuthor = new Author(5L, EXPECTED_NAME);
+        when(authorRepository.findById(5L)).thenReturn(Optional.of(testAuthor));
+        when(bookRepository.findByAuthors(testAuthor)).thenReturn(Collections.emptyList());
+        doNothing().when(authorRepository).delete(testAuthor);
+
+        assertDoesNotThrow(() -> authorService.deleteAuthorById(5L));
+    }
+
+    @Test
+    @DisplayName("не удаляет автора из БД")
+    void shouldNotDeleteAuthor() {
+        Author testAuthor = new Author(10L, EXPECTED_NAME);
+        Genre testGenre = new Genre(10L, EXPECTED_NAME);
+        Book testBook = new Book("Test", List.of(testAuthor), List.of(testGenre));
+        when(bookRepository.findByAuthors(testAuthor)).thenReturn(List.of(testBook));
+        when(authorRepository.findById(10L)).thenReturn(Optional.of(testAuthor));
+
+        doNothing().when(authorRepository).delete(testAuthor);
+
+        assertThrows(DataReferenceException.class, () -> authorService.deleteAuthorById(10L));
     }
 }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 public interface BookEntry {
 
-    String getId();
+    long getId();
 
     String getTitle();
 

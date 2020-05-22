@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 public interface CommentEntry {
 
-    String getId();
+    long getId();
 
     String getText();
 
