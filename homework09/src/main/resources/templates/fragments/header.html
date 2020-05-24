@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head-menu">
+    <meta charset="UTF-8"/>
+
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/popper/popper.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="header">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
+        <a class="navbar-brand" href="#" th:href="@{/}" th:text="#{menu.main}">Библиотека</a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/book}" th:text="#{menu.book}">Книги</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/author}" th:text="#{menu.author}">Авторы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/genre}" th:text="#{menu.genre}">Жанры</a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <a href="?lang=ru" class="badge badge-secondary">
+            <span>
+                <img th:src="@{img/russia-flag.png}"/>
+            </span>
+        </a>
+        <a href="?lang=en" class="badge badge-secondary">
+            <span>
+                <img th:src="@{img/united-kingdom.png}"/>
+            </span>
+        </a>
+    </div>
+</nav>
+</body>
+</html>
