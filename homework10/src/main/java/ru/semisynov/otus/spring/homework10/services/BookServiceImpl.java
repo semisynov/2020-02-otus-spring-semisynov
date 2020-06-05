@@ -9,6 +9,7 @@ import ru.semisynov.otus.spring.homework10.model.Book;
 import ru.semisynov.otus.spring.homework10.repositories.BookRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service("bookService")
@@ -56,8 +57,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void addBookComment(long id, String text) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
-        commentService.addComment(book, text);
+    public Book addBookComment(long id, String text) {
+        Optional<Book> bookOptional = bookRepository.findById(id);
+        bookOptional.ifPresent(book -> commentService.addComment(book, text));
+        return bookOptional.orElseThrow(() -> new ItemNotFoundException(TEXT_NOT_FOUND));
     }
 }

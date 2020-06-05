@@ -37,7 +37,6 @@ public class GenreController {
     }
 
     @PostMapping("/genre")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<GenreDto> createGenre(@RequestBody GenreDto genreDto) {
         Genre genre = convertToEntity(genreDto);
         Genre postCreated = genreService.saveGenre(genre);
@@ -46,9 +45,9 @@ public class GenreController {
 
     @PutMapping("/genre/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Genre updateGenre(@PathVariable("id") long id, @RequestBody GenreDto genreDto) {
+    public GenreDto updateGenre(@PathVariable("id") long id, @RequestBody GenreDto genreDto) {
         Genre genre = convertToEntity(genreDto);
-        return genreService.updateGenre(id, genre);
+        return convertToDto(genreService.updateGenre(id, genre));
     }
 
     @DeleteMapping("/genre/{id}")

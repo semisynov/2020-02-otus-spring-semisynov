@@ -27,7 +27,6 @@ public class AuthorController {
         List<AuthorDto> authors = authorService.findAllAuthors().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
-
         return ResponseEntity.ok(authors);
     }
 
@@ -38,7 +37,6 @@ public class AuthorController {
     }
 
     @PostMapping("/author")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<AuthorDto> createAuthor(@RequestBody AuthorDto authorDto) {
         Author author = convertToEntity(authorDto);
         Author postCreated = authorService.saveAuthor(author);
@@ -47,9 +45,9 @@ public class AuthorController {
 
     @PutMapping("/author/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Author updateAuthor(@PathVariable("id") long id, @RequestBody AuthorDto authorDto) {
+    public AuthorDto updateAuthor(@PathVariable("id") long id, @RequestBody AuthorDto authorDto) {
         Author author = convertToEntity(authorDto);
-        return authorService.updateAuthor(id, author);
+        return convertToDto(authorService.updateAuthor(id, author));
     }
 
     @DeleteMapping("/author/{id}")

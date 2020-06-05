@@ -16,5 +16,5 @@ public interface BookService {
 
     void deleteBookById(long id);
 
-    void addBookComment(long id, String text);
+    Book addBookComment(long id, String text);
 }

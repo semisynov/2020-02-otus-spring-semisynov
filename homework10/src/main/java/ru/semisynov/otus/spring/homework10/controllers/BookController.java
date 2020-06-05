@@ -9,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.semisynov.otus.spring.homework10.dto.BookDto;
 import ru.semisynov.otus.spring.homework10.model.Book;
-import ru.semisynov.otus.spring.homework10.services.AuthorService;
 import ru.semisynov.otus.spring.homework10.services.BookService;
-import ru.semisynov.otus.spring.homework10.services.GenreService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,8 +20,6 @@ import java.util.stream.Collectors;
 public class BookController {
 
     private final BookService bookService;
-    private final AuthorService authorService;
-    private final GenreService genreService;
     private final ModelMapper modelMapper;
 
     @GetMapping("/book")
@@ -41,7 +37,6 @@ public class BookController {
     }
 
     @PostMapping("/book")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BookDto> createBook(@RequestBody BookDto bookDto) {
         Book book = convertToEntity(bookDto);
         Book postCreated = bookService.saveBook(book);
@@ -50,9 +45,9 @@ public class BookController {
 
     @PutMapping("/book/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Book updateBook(@PathVariable("id") long id, @RequestBody BookDto bookDto) {
+    public BookDto updateBook(@PathVariable("id") long id, @RequestBody BookDto bookDto) {
         Book book = convertToEntity(bookDto);
-        return bookService.updateBook(id, book);
+        return convertToDto(bookService.updateBook(id, book));
     }
 
     @DeleteMapping("/book/{id}")
@@ -61,11 +56,10 @@ public class BookController {
         bookService.deleteBookById(id);
     }
 
-
     @PostMapping("/book/{id}/comment")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createBookComment(@PathVariable("id") long id, @RequestParam String text) {
-        bookService.addBookComment(id, text);
+    public BookDto createBookComment(@PathVariable("id") long id, @RequestParam String text) {
+        return convertToDto(bookService.addBookComment(id, text));
     }
 
     private BookDto convertToDto(Book book) {
