@@ -1,3 +1,9 @@
+HELP.md
+
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
 target/
 
 # Default ignored files
@@ -26,6 +32,14 @@ target/
 **/.mvn*
 **/mvn*
 
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
 # Mac
 .DS_Store
 
@@ -39,3 +53,6 @@ target/
 
 # Log files
 *.log
+
+### VS Code ###
+.vscode/

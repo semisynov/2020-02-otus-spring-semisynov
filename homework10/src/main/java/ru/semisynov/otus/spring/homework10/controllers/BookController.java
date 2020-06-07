@@ -1,7 +1,6 @@
 package ru.semisynov.otus.spring.homework10.controllers;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
@@ -14,9 +13,8 @@ import ru.semisynov.otus.spring.homework10.services.BookService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @RequiredArgsConstructor
-@RestController("bookController")
+@RestController
 public class BookController {
 
     private final BookService bookService;
