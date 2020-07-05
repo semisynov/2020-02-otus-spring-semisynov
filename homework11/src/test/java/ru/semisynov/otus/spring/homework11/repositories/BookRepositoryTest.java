@@ -1,77 +1,117 @@
 package ru.semisynov.otus.spring.homework11.repositories;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
+import reactor.test.StepVerifier;
+import ru.semisynov.otus.spring.homework11.config.ApplicationTestConfig;
+import ru.semisynov.otus.spring.homework11.config.MongockConfig;
+import ru.semisynov.otus.spring.homework11.model.Author;
+import ru.semisynov.otus.spring.homework11.model.Book;
+import ru.semisynov.otus.spring.homework11.model.Genre;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Repository для работы с книгами ")
-//@DataJpaTest
+@DataMongoTest
+@Import({ApplicationTestConfig.class, MongockConfig.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class BookRepositoryTest {
-//
-//    private static final int EXPECTED_BOOKS_COUNT = 3;
-//    private static final long FIRST_ID = 1L;
-//
-//    @Autowired
-//    private BookRepository bookRepository;
-//
-//    @Autowired
-//    private TestEntityManager entityManager;
-//
-//    @DisplayName("возвращает общее количество всех книг")
-//    @Test
-//    void shouldReturnExpectedBooksCount() {
-//        long count = bookRepository.count();
-//        assertThat(count).isEqualTo(EXPECTED_BOOKS_COUNT);
-//    }
-//
-//    @DisplayName("возвращает заданную книгу по её id")
-//    @Test
-//    void shouldReturnExpectedBookById() {
-//        Optional<Book> optionalBook = bookRepository.findById(FIRST_ID);
-//        Book expectedBook = entityManager.find(Book.class, FIRST_ID);
-//        assertThat(optionalBook).isPresent().get()
-//                .isEqualToComparingFieldByField(expectedBook);
-//    }
-//
-//    @DisplayName("возвращает заданную книгу по её id dto")
-//    @Test
-//    void shouldReturnExpectedBookEntryById() {
-//        Optional<Book> optionalBook = bookRepository.findById(FIRST_ID);
-//        Book expectedBook = entityManager.find(Book.class, FIRST_ID);
-//
-//        assertThat(optionalBook).isPresent().get().matches(b -> b.getTitle().equals(expectedBook.getTitle()));
-//    }
-//
-//    @DisplayName("возвращает список всех книг")
-//    @Test
-//    void shouldReturnExpectedBooksList() {
-//        List<Book> books = bookRepository.findAll();
-//        assertThat(books).isNotNull().hasSize(EXPECTED_BOOKS_COUNT)
-//                .allMatch(b -> !b.getTitle().equals(""));
-//    }
-//
-//    @DisplayName("добавляет книгу в БД")
-//    @Test
-//    void shouldInsertBook() {
-//        List<Author> authors = Collections.emptyList();
-//        List<Genre> genres = Collections.emptyList();
-//
-//        Book testBook = new Book(0L, "TestBook", authors, genres, Collections.emptyList());
-//        bookRepository.save(testBook);
-//
-//        assertThat(testBook.getId()).isGreaterThan(0);
-//
-//        Book actualBook = entityManager.find(Book.class, testBook.getId());
-//        assertThat(actualBook).isNotNull().matches(a -> !a.getTitle().isEmpty());
-//    }
-//
-//    @DisplayName("удаляет книгу из БД")
-//    @Test
-//    void shouldDeleteBook() {
-//        Book firstBook = entityManager.find(Book.class, FIRST_ID);
-//        assertThat(firstBook).isNotNull();
-//
-//        bookRepository.delete(firstBook);
-//        Book deletedBook = entityManager.find(Book.class, FIRST_ID);
-//
-//        assertThat(deletedBook).isNull();
-//    }
+
+    @Autowired
+    private BookRepository bookRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    private static final long EXPECTED_BOOKS_COUNT = 5L;
+    private static final String EXPECTED_BOOKS_TITLE = "ТестКнига0";
+    private static final String EXPECTED_ID = "0";
+
+    @DisplayName("возвращает общее количество всех книг")
+    @Test
+    void shouldReturnExpectedBooksCount() {
+        StepVerifier
+                .create(bookRepository.count())
+                .assertNext(c -> assertEquals(EXPECTED_BOOKS_COUNT, c))
+                .expectComplete()
+                .verify();
+    }
+
+    @DisplayName("возвращает список всех книг")
+    @Test
+    public void shouldReturnExpectedBooksList() {
+        StepVerifier
+                .create(bookRepository.findAll())
+                .assertNext(b -> assertEquals("ТестКнига0", b.getTitle()))
+                .assertNext(b -> assertEquals("ТестКнига1", b.getTitle()))
+                .assertNext(b -> assertEquals("ТестКнига2", b.getTitle()))
+                .assertNext(b -> assertEquals("ТестКнига3", b.getTitle()))
+                .assertNext(b -> assertEquals("ТестКнига4", b.getTitle()))
+                .expectComplete()
+                .verify();
+    }
+
+    @DisplayName("возвращает заданную книгу по её id")
+    @Test
+    public void shouldReturnExpectedBookById() {
+        StepVerifier
+                .create(bookRepository.findById(EXPECTED_ID))
+                .assertNext(b -> assertEquals(EXPECTED_BOOKS_TITLE, b.getTitle()))
+                .expectComplete()
+                .verify();
+    }
+
+    @DisplayName("добавляет книгу в БД")
+    @Test
+    public void shouldInsertBook() {
+        StepVerifier
+                .create(bookRepository.save(new Book("Тест", Collections.emptyList(), Collections.emptyList())))
+                .assertNext(a -> assertNotNull(a.getId()))
+                .expectComplete()
+                .verify();
+    }
+
+    @DisplayName("удаляет книгу из БД")
+    @Test
+    void shouldDeleteBook() {
+        StepVerifier
+                .create(bookRepository.findById("0"))
+                .expectNextCount(1)
+                .then(() -> bookRepository.deleteById("0"))
+                .then(() -> bookRepository.findById("0"))
+                .expectNextCount(0)
+                .expectComplete()
+                .verify();
+    }
+
+    @DisplayName("возвращает список всех книг по автору")
+    @Test
+    public void shouldReturnExpectedBooksListByAuthor() {
+        Author author = mongoTemplate.findById("0", Author.class);
+
+        StepVerifier
+                .create(bookRepository.findByAuthors(author))
+                .assertNext(b -> assertEquals("ТестКнига0", b.getTitle()))
+                .expectComplete()
+                .verify();
+    }
+
+    @DisplayName("возвращает список всех книг по жанру")
+    @Test
+    public void shouldReturnExpectedBooksListByGenre() {
+        Genre genre = mongoTemplate.findById("0", Genre.class);
+
+        StepVerifier
+                .create(bookRepository.findByGenres(genre))
+                .assertNext(b -> assertEquals("ТестКнига0", b.getTitle()))
+                .expectComplete()
+                .verify();
+    }
 }

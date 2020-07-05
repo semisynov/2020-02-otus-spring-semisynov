@@ -16,7 +16,7 @@ public class MongockConfig {
     private int port;
     private String database;
 
-    private static final String CHANGELOG_PACKAGE = "ru.semisynov.otus.spring.homework11.changelogs";
+    private static final String CHANGELOG_PACKAGE = "ru.semisynov.otus.spring.homework11.test";
 
     @Bean
     public Mongock mongock(MongockConfig mongockConfig, MongoClient mongoClient) {

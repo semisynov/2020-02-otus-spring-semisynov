@@ -9,6 +9,7 @@ import ru.semisynov.otus.spring.homework11.model.Book;
 import ru.semisynov.otus.spring.homework11.model.Comment;
 import ru.semisynov.otus.spring.homework11.model.Genre;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +27,8 @@ public class InitMongoDBTestChangeLog {
 
     @ChangeSet(order = "001", id = "initAuthors", author = "Semisynov", runAlways = true)
     public void initAuthors(MongoTemplate template) {
-        for (int i = 0; i < 10; i++) {
-            Author author = new Author("ТестАвтор" + i);
+        for (int i = 0; i < 5; i++) {
+            Author author = new Author(String.valueOf(i), "ТестАвтор" + i);
             template.save(author);
             authors.add(author);
         }
@@ -35,8 +36,8 @@ public class InitMongoDBTestChangeLog {
 
     @ChangeSet(order = "002", id = "initGenres", author = "Semisynov", runAlways = true)
     public void initGenres(MongoTemplate template) {
-        for (int i = 0; i < 10; i++) {
-            Genre genre = new Genre("ТестЖанр" + i);
+        for (int i = 0; i < 5; i++) {
+            Genre genre = new Genre(String.valueOf(i), "ТестЖанр" + i);
             template.save(genre);
             genres.add(genre);
         }
@@ -45,9 +46,9 @@ public class InitMongoDBTestChangeLog {
     @ChangeSet(order = "003", id = "initBooks", author = "Semisynov", runAlways = true)
     public void initBooks(MongoTemplate template) {
         for (int i = 0; i < 5; i++) {
-            List<Author> bookAuthors = List.of(authors.get(i), authors.get(i + 1));
-            List<Genre> bookGenres = List.of(genres.get(i), genres.get(i + 1));
-            Book book = new Book("ТестКнига" + i, bookAuthors, bookGenres);
+            List<Author> bookAuthors = List.of(authors.get(i));
+            List<Genre> bookGenres = List.of(genres.get(i));
+            Book book = new Book(String.valueOf(i), "ТестКнига" + i, bookAuthors, bookGenres);
             template.save(book);
             books.add(book);
         }
@@ -56,8 +57,9 @@ public class InitMongoDBTestChangeLog {
     @ChangeSet(order = "004", id = "initComments", author = "Semisynov", runAlways = true)
     public void initComments(MongoTemplate template) {
         for (Book book : books) {
-            Comment comment = new Comment(book, "ТестКоммент");
+            Comment comment = new Comment(book, "ТестКоммент" + book.getId());
             template.save(comment);
         }
+        template.save(new Comment("5", LocalDateTime.now(), "ТестКоммент5", books.get(1)));
     }
 }

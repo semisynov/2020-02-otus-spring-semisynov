@@ -59,8 +59,9 @@ public class BookController {
     public Mono<ResponseEntity<Object>> deleteBook(@PathVariable("id") String id) {
         return bookRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ItemNotFoundException(TEXT_NOT_FOUND)))
-                .flatMap(bookRepository::save)
-                .then(Mono.empty());
+                .flatMap(b -> commentRepository.deleteAllByBook(b)
+                        .then(bookRepository.delete(b))
+                        .then(Mono.empty()));
     }
 
     private BookDto convertToDto(Book book) {
