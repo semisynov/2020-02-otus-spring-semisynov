@@ -1,0 +1,169 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-data.yaml
+  - changeSet:
+      id: 7
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: genres
+            columns:
+              - column:
+                  name: title
+                  value: "Жанр1"
+        - insert:
+            tableName: genres
+            columns:
+              - column:
+                  name: title
+                  value: "Жанр2"
+        - insert:
+            tableName: authors
+            columns:
+              - column:
+                  name: name
+                  value: "Автор1"
+        - insert:
+            tableName: authors
+            columns:
+              - column:
+                  name: name
+                  value: "Автор2"
+  - changeSet:
+      id: 8
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Книга1"
+        - insert:
+            tableName: book_genre
+            columns:
+              - column:
+                  name: book_id
+                  value: 1
+              - column:
+                  name: genre_id
+                  value: 1
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 1
+              - column:
+                  name: author_id
+                  value: 1
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Книга2"
+        - insert:
+            tableName: book_genre
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: genre_id
+                  value: 1
+        - insert:
+            tableName: book_genre
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: genre_id
+                  value: 2
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: author_id
+                  value: 1
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: author_id
+                  value: 2
+  - changeSet:
+      id: 9
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: comments
+            columns:
+              - column:
+                  name: book_id
+                  value: 1
+              - column:
+                  name: date_time
+                  value: "2020-04-18T13:05:27.434135"
+              - column:
+                  name: text
+                  value: "Комментарий к книге 1"
+        - insert:
+            tableName: comments
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: date_time
+                  value: "2020-04-18T13:05:27.434135"
+              - column:
+                  name: text
+                  value: "Комментарий к книге 2"
+
+  - changeSet:
+      id: 11
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: login
+                  value: "admin"
+              - column:
+                  name: is_locked
+                  value: false
+              - column:
+                  name: password
+                  value: "$2a$10$V3blUuumPK12nv0fykUDbu12uJ/oQsBTDA76arlVbfw3Bd429RIHa"
+              - column:
+                  name: role
+                  value: "ROLE_ADMIN"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: login
+                  value: "user"
+              - column:
+                  name: is_locked
+                  value: false
+              - column:
+                  name: password
+                  value: "$2a$10$V3blUuumPK12nv0fykUDbu12uJ/oQsBTDA76arlVbfw3Bd429RIHa"
+              - column:
+                  name: role
+                  value: "ROLE_USER"
