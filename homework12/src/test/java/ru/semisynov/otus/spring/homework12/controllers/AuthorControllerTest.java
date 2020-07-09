@@ -31,8 +31,10 @@ class AuthorControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private AuthorService authorService;
+
     @MockBean
     private UserRepository userRepository;
 
@@ -43,13 +45,12 @@ class AuthorControllerTest {
     @Test
     @SneakyThrows
     @DisplayName("выводит view списка авторов")
-    @WithMockUser(value = "user", roles = {"USER"})
+    @WithMockUser
     public void shouldReturnAuthorsList() {
         List<Author> authors = List.of(EXPECTED_ENTITY);
         given(authorService.findAllAuthors()).willReturn(authors);
 
         mockMvc.perform(get("/author"))
-                .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(view().name("author/list"))
                 .andExpect(model().attribute("authors", authors))
@@ -58,12 +59,24 @@ class AuthorControllerTest {
 
     @Test
     @SneakyThrows
+    @DisplayName("не выводит view списка авторов и перекидывает на логин")
+    public void shouldNotReturnAuthorsList() {
+        List<Author> authors = List.of(EXPECTED_ENTITY);
+        given(authorService.findAllAuthors()).willReturn(authors);
+
+        mockMvc.perform(get("/author"))
+                .andExpect(status().is3xxRedirection())
+                .andDo(print());
+    }
+
+    @Test
+    @SneakyThrows
     @DisplayName("выводит view редактирования автора")
+    @WithMockUser
     public void shouldReturnAuthorEdit() {
         given(authorService.findAuthorById(EXPECTED_ID)).willReturn(EXPECTED_ENTITY);
 
         mockMvc.perform(get("/author/edit?id=" + EXPECTED_ID))
-                .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(view().name("author/edit"))
                 .andExpect(model().attribute("author", EXPECTED_ENTITY))
@@ -73,11 +86,11 @@ class AuthorControllerTest {
     @Test
     @SneakyThrows
     @DisplayName("выводит view просмотра автора")
+    @WithMockUser
     public void shouldReturnAuthorView() {
         given(authorService.findAuthorById(EXPECTED_ID)).willReturn(EXPECTED_ENTITY);
 
         mockMvc.perform(get("/author/view?id=" + EXPECTED_ID))
-                .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(view().name("author/view"))
                 .andExpect(model().attribute("author", EXPECTED_ENTITY))
@@ -86,6 +99,7 @@ class AuthorControllerTest {
 
     @Test
     @DisplayName("удаляет автора и переадресовывает в список")
+    @WithMockUser
     public void shouldDeleteAuthor() throws Exception {
         doNothing().when(authorService).deleteAuthorById(EXPECTED_ID);
 
@@ -97,12 +111,12 @@ class AuthorControllerTest {
 
     @Test
     @DisplayName("не удаляет автора и переадресовывает на ошибку")
+    @WithMockUser
     public void shouldNotDeleteAuthor() throws Exception {
         doThrow(new DataReferenceException("Unable to delete the author %s there are links in the database"))
                 .when(authorService).deleteAuthorById(EXPECTED_ID);
 
         mockMvc.perform(get("/author/delete?id=1"))
-                .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(view().name("error/reference-exception"))
                 .andExpect(status().isOk());

@@ -91,7 +91,7 @@ class GenreServiceImplTest {
 
     @Test
     @DisplayName("удаляет жанр из БД")
-    void shouldDeleteAuthor() {
+    void shouldDeleteGenre() {
         Genre testGenre = new Genre(5L, EXPECTED_TITLE);
         when(genreRepository.findById(5L)).thenReturn(Optional.of(testGenre));
         when(bookRepository.findByGenres(testGenre)).thenReturn(Collections.emptyList());
@@ -102,7 +102,7 @@ class GenreServiceImplTest {
 
     @Test
     @DisplayName("не удаляет жанр из БД")
-    void shouldNotDeleteAuthor() {
+    void shouldNotDeleteGenre() {
         Author testAuthor = new Author(10L, EXPECTED_TITLE);
         Genre testGenre = new Genre(10L, EXPECTED_TITLE);
         Book testBook = new Book("Test", List.of(testAuthor), List.of(testGenre));

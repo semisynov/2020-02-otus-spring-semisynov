@@ -35,4 +35,12 @@ public class User {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    public User(String login, LocalDateTime expired, String password, UserRole role) {
+        this.login = login;
+        this.isLocked = false;
+        this.expired = expired;
+        this.password = password;
+        this.role = role;
+    }
 }
