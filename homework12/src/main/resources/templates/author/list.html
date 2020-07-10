@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head-menu">
+    <title th:text="#{author.edit.header}">Автор</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <a th:href="@{/author/edit(id=0,isCreate=true)}" class="btn btn-primary">
+                        <span>
+                            <img th:src="@{img/plus-thick.png}"/>
+                        </span>
+                        <span th:text="#{button.new}">
+                            Создать
+                        </span>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table id="authors" class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th th:text="#{author.table.id}">ID</th>
+                            <th th:text="#{author.table.name}">Имя</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="author : ${authors}" th:object="${author}">
+                            <td>
+                                <a href="edit.html" th:href="@{/author/view(id=*{id})}" th:text="*{id}"></a>
+                            </td>
+                            <td th:text="*{name}">Автор 1</td>
+                            <td>
+                                <a th:href="@{/author/edit(id=*{id})}" class="btn btn-outline-light text-dark">
+                                    <span>
+                                        <img th:src="@{img/pencil.png}"/>
+                                    </span>
+                                    <span th:text="#{button.edit}">
+                                        Изменить
+                                    </span>
+                                </a>
+                                <button type="button" class="btn btn-outline-danger text-dark" data-toggle="modal"
+                                        th:attr="data-target='#recordDeleteModal'+${author.id}">
+                                    <span>
+                                        <img th:src="@{img/delete.png}"/>
+                                    </span>
+                                    <span th:text="#{button.delete}">
+                                        Удалить
+                                    </span>
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" th:attr="id='recordDeleteModal'+${author.id}" tabindex="-1"
+                                     role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="recordDeleteModalLabel"
+                                                    th:text="#{modal.header}">Удаление записи</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" th:text="#{modal.question}">
+                                                Вы действительно хотите удалить запись?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                                        th:text="#{modal.no}">
+                                                    Нет
+                                                </button>
+                                                <a href="list.html" class="btn btn-primary"
+                                                   th:attr="href='/author/delete?id=' + ${author.id}"
+                                                   th:text="#{modal.yes}">Да</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal end -->
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

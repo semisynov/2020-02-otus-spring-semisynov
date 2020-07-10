@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head-menu">
+    <title th:text="#{author.edit.header}">Автор</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-lg-12 text-lg-center">
+                        <h2 th:text="#{author.edit.header}">Автор</h2>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="col-lg-8 push-lg-4 personal-info">
+                        <form role="form" id="view-form" action="view.html" th:object="${author}">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label" th:text="#{author.edit.id}">ID:</label>
+                                <div class="col-lg-9">
+                                    <input class="form-control" id="id-input" type="text" readonly
+                                           th:field="*{id}" value="1"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label" th:text="#{author.edit.name}">Имя:</label>
+                                <div class="col-lg-9">
+                                    <input class="form-control" id="name-input" type="text" readonly th:field="*{name}"
+                                           value="Author Name"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label"></label>
+                                <div class="col-lg-9">
+                                    <a href="list.html" th:href="@{/author}" class="btn btn-secondary">
+                                        <span th:text="#{button.cancel}">
+                                            Отмена
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+
