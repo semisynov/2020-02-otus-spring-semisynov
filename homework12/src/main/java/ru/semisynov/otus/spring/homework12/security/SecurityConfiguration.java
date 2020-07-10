@@ -3,6 +3,7 @@ package ru.semisynov.otus.spring.homework12.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +18,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/", "/login", "/jquery/**", "/popper/**", "/bootstrap/**").permitAll()
+                .authorizeRequests().antMatchers("/", "/login").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/user/**").hasRole("ADMIN")
                 .and()
@@ -41,5 +42,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(securityUserDetailsService)
                 .passwordEncoder(passwordEncoder);
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/jquery/**", "/popper/**", "/bootstrap/**");
     }
 }
