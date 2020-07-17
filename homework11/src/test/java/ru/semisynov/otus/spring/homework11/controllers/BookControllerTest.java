@@ -124,6 +124,7 @@ class BookControllerTest {
     public void shouldDeleteBook() {
         Mockito.when(bookRepository.findById(EXPECTED_ID)).thenReturn(Mono.just(EXPECTED_ENTITY));
         Mockito.when(bookRepository.delete(EXPECTED_ENTITY)).thenReturn(Mono.empty());
+        Mockito.when(commentRepository.deleteAllByBook(EXPECTED_ENTITY)).thenReturn(Mono.empty());
 
         webClient.delete().uri("/book/{id}", EXPECTED_ID)
                 .exchange()
