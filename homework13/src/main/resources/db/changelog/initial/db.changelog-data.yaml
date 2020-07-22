@@ -1,0 +1,593 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-data.yaml
+  - changeSet:
+      id: 7
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: genres
+            columns:
+              - column:
+                  name: title
+                  value: "Жанр1"
+        - insert:
+            tableName: genres
+            columns:
+              - column:
+                  name: title
+                  value: "Жанр2"
+        - insert:
+            tableName: genres
+            columns:
+              - column:
+                  name: title
+                  value: "Детский жанр"
+        - insert:
+            tableName: authors
+            columns:
+              - column:
+                  name: name
+                  value: "Автор1"
+        - insert:
+            tableName: authors
+            columns:
+              - column:
+                  name: name
+                  value: "Автор2"
+        - insert:
+            tableName: authors
+            columns:
+              - column:
+                  name: name
+                  value: "Детский автор"
+  - changeSet:
+      id: 8
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Обычная книга 1"
+        - insert:
+            tableName: book_genre
+            columns:
+              - column:
+                  name: book_id
+                  value: 1
+              - column:
+                  name: genre_id
+                  value: 1
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 1
+              - column:
+                  name: author_id
+                  value: 1
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Обычная книга 2"
+        - insert:
+            tableName: book_genre
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: genre_id
+                  value: 1
+        - insert:
+            tableName: book_genre
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: genre_id
+                  value: 2
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: author_id
+                  value: 1
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: author_id
+                  value: 2
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Детская книга"
+        - insert:
+            tableName: book_genre
+            columns:
+              - column:
+                  name: book_id
+                  value: 3
+              - column:
+                  name: genre_id
+                  value: 3
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 3
+              - column:
+                  name: author_id
+                  value: 3
+  - changeSet:
+      id: 9
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: comments
+            columns:
+              - column:
+                  name: book_id
+                  value: 1
+              - column:
+                  name: date_time
+                  value: "2020-04-18T13:05:27.434135"
+              - column:
+                  name: text
+                  value: "Комментарий к книге 1"
+        - insert:
+            tableName: comments
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: date_time
+                  value: "2020-04-18T13:05:27.434135"
+              - column:
+                  name: text
+                  value: "Комментарий к книге 2"
+
+  - changeSet:
+      id: 11
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: login
+                  value: "admin"
+              - column:
+                  name: is_locked
+                  value: false
+              - column:
+                  name: password
+                  value: "$2a$10$V3blUuumPK12nv0fykUDbu12uJ/oQsBTDA76arlVbfw3Bd429RIHa"
+              - column:
+                  name: role
+                  value: "ROLE_ADMIN"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: login
+                  value: "user"
+              - column:
+                  name: is_locked
+                  value: false
+              - column:
+                  name: password
+                  value: "$2a$10$V3blUuumPK12nv0fykUDbu12uJ/oQsBTDA76arlVbfw3Bd429RIHa"
+              - column:
+                  name: role
+                  value: "ROLE_USER"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: login
+                  value: "child_user"
+              - column:
+                  name: is_locked
+                  value: false
+              - column:
+                  name: password
+                  value: "$2a$10$V3blUuumPK12nv0fykUDbu12uJ/oQsBTDA76arlVbfw3Bd429RIHa"
+              - column:
+                  name: role
+                  value: "ROLE_CHILD"
+  - changeSet:
+      id: 12
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: acl_sid
+            columns:
+              - column:
+                  name: principal
+                  value: 1
+              - column:
+                  name: sid
+                  value: "user"
+        - insert:
+            tableName: acl_sid
+            columns:
+              - column:
+                  name: principal
+                  value: 1
+              - column:
+                  name: sid
+                  value: "child_user"
+        - insert:
+            tableName: acl_sid
+            columns:
+              - column:
+                  name: principal
+                  value: 0
+              - column:
+                  name: sid
+                  value: "ROLE_USER"
+        - insert:
+            tableName: acl_sid
+            columns:
+              - column:
+                  name: principal
+                  value: 0
+              - column:
+                  name: sid
+                  value: "ROLE_ADMIN"
+        - insert:
+            tableName: acl_sid
+            columns:
+              - column:
+                  name: principal
+                  value: 0
+              - column:
+                  name: sid
+                  value: "ROLE_CHILD"
+  - changeSet:
+      id: 13
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: acl_class
+            columns:
+              - column:
+                  name: class
+                  value: "ru.semisynov.otus.spring.homework13.model.Book"
+  - changeSet:
+      id: 14
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: acl_object_identity
+            columns:
+              - column:
+                  name: object_id_class
+                  value: 1
+              - column:
+                  name: object_id_identity
+                  value: 0
+              - column:
+                  name: parent_object
+                  value: NULL
+              - column:
+                  name: owner_sid
+                  value: 4
+              - column:
+                  name: entries_inheriting
+                  value: 0
+        - insert:
+            tableName: acl_object_identity
+            columns:
+              - column:
+                  name: object_id_class
+                  value: 1
+              - column:
+                  name: object_id_identity
+                  value: 1
+              - column:
+                  name: parent_object
+                  value: NULL
+              - column:
+                  name: owner_sid
+                  value: 4
+              - column:
+                  name: entries_inheriting
+                  value: 0
+        - insert:
+            tableName: acl_object_identity
+            columns:
+              - column:
+                  name: object_id_class
+                  value: 1
+              - column:
+                  name: object_id_identity
+                  value: 2
+              - column:
+                  name: parent_object
+                  value: NULL
+              - column:
+                  name: owner_sid
+                  value: 4
+              - column:
+                  name: entries_inheriting
+                  value: 0
+        - insert:
+            tableName: acl_object_identity
+            columns:
+              - column:
+                  name: object_id_class
+                  value: 1
+              - column:
+                  name: object_id_identity
+                  value: 3
+              - column:
+                  name: parent_object
+                  value: NULL
+              - column:
+                  name: owner_sid
+                  value: 4
+              - column:
+                  name: entries_inheriting
+                  value: 0
+  - changeSet:
+      id: 15
+      author: Ilia Semisynov
+      changes:
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 1
+              - column:
+                  name: ace_order
+                  value: 1
+              - column:
+                  name: sid
+                  value: 4
+              - column:
+                  name: mask
+                  value: 15
+              - column:
+                  name: granting
+                  value: 1
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 2
+              - column:
+                  name: ace_order
+                  value: 1
+              - column:
+                  name: sid
+                  value: 3
+              - column:
+                  name: mask
+                  value: 5
+              - column:
+                  name: granting
+                  value: 1
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 2
+              - column:
+                  name: ace_order
+                  value: 2
+              - column:
+                  name: sid
+                  value: 4
+              - column:
+                  name: mask
+                  value: 15
+              - column:
+                  name: granting
+                  value: 1
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 3
+              - column:
+                  name: ace_order
+                  value: 1
+              - column:
+                  name: sid
+                  value: 3
+              - column:
+                  name: mask
+                  value: 5
+              - column:
+                  name: granting
+                  value: 1
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 3
+              - column:
+                  name: ace_order
+                  value: 2
+              - column:
+                  name: sid
+                  value: 4
+              - column:
+                  name: mask
+                  value: 15
+              - column:
+                  name: granting
+                  value: 1
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 4
+              - column:
+                  name: ace_order
+                  value: 1
+              - column:
+                  name: sid
+                  value: 3
+              - column:
+                  name: mask
+                  value: 5
+              - column:
+                  name: granting
+                  value: 1
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 4
+              - column:
+                  name: ace_order
+                  value: 2
+              - column:
+                  name: sid
+                  value: 4
+              - column:
+                  name: mask
+                  value: 15
+              - column:
+                  name: granting
+                  value: 1
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 2
+              - column:
+                  name: ace_order
+                  value: 3
+              - column:
+                  name: sid
+                  value: 5
+              - column:
+                  name: mask
+                  value: 1
+              - column:
+                  name: granting
+                  value: 0
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 3
+              - column:
+                  name: ace_order
+                  value: 3
+              - column:
+                  name: sid
+                  value: 5
+              - column:
+                  name: mask
+                  value: 1
+              - column:
+                  name: granting
+                  value: 0
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
+        - insert:
+            tableName: acl_entry
+            columns:
+              - column:
+                  name: acl_object_identity
+                  value: 4
+              - column:
+                  name: ace_order
+                  value: 3
+              - column:
+                  name: sid
+                  value: 5
+              - column:
+                  name: mask
+                  value: 1
+              - column:
+                  name: granting
+                  value: 1
+              - column:
+                  name: audit_success
+                  value: 1
+              - column:
+                  name: audit_failure
+                  value: 1
