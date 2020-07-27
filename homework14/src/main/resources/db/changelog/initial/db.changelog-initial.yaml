@@ -1,0 +1,125 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-initial.yaml
+  - changeSet:
+      id: 1
+      author: Ilia Semisynov
+      changes:
+        - createTable:
+            tableName: books
+            columns:
+              - column:
+                  name: book_id
+                  type: varchar(24)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: Ilia Semisynov
+      changes:
+        - createTable:
+            tableName: authors
+            columns:
+              - column:
+                  name: author_id
+                  type: varchar(24)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 3
+      author: Ilia Semisynov
+      changes:
+        - createTable:
+            tableName: genres
+            columns:
+              - column:
+                  name: genre_id
+                  type: varchar(24)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 4
+      author: Ilia Semisynov
+      changes:
+        - createTable:
+            tableName: book_genre
+            columns:
+              - column:
+                  name: book_id
+                  type: varchar(24)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: genre_id
+                  type: varchar(24)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_genre
+                    references: genres(genre_id)
+  - changeSet:
+      id: 5
+      author: Ilia Semisynov
+      changes:
+        - createTable:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  type: varchar(24)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_id
+                  type: varchar(24)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_author
+                    references: authors(author_id)
+  - changeSet:
+      id: 6
+      author: Ilia Semisynov
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: comment_id
+                  type: varchar(24)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: varchar(24)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_comment
+                    references: books(book_id)
+                    deleteCascade: true
+              - column:
+                  name: date_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar(2048)
+                  constraints:
+                    nullable: false
